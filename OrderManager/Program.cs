@@ -38,21 +38,34 @@ internal class Program
 
     static Order CreateOrder()
     {
-        Console.Write( "Введите название товара: " );
-        string productName = Console.ReadLine();
+        string productName = GetNonEmptyStringFromConsole( "Введите название товара: ", "Неверный ввод. Название товара не может быть пустым. Попробуйте снова." );
 
         Console.Write( "Введите количество товара: " );
         int quantity;
         while ( !int.TryParse( Console.ReadLine(), out quantity ) || quantity <= 0 )
             Console.WriteLine( $"Неверный ввод. Введите целое положительное число: " );
 
-        Console.Write( "Введите Ваше имя: " );
-        string customerName = Console.ReadLine();
+        string customerName = GetNonEmptyStringFromConsole("Введите Ваше имя: ", "Неверный ввод. Имя не может быть пустым. Попробуйте снова." );
 
-        Console.Write( "Введите адрес доставки: " );
-        string address = Console.ReadLine();
+        string address = GetNonEmptyStringFromConsole( "Введите адрес доставки: ", "Неверный ввод. Адрес доставки не может быть пустым. Попробуйте снова." );
 
         return new Order( productName: productName, quantity: quantity, customerName: customerName, address: address );
+    }
+
+    static string GetNonEmptyStringFromConsole( string message, string errorMessage )
+    {
+        string input;
+        do
+        {
+            Console.Write( message );
+            input = Console.ReadLine();
+
+            if ( string.IsNullOrWhiteSpace( input ) )
+                Console.WriteLine( errorMessage );
+
+        } while ( string.IsNullOrWhiteSpace( input ) );
+
+        return input;
     }
 }
 
