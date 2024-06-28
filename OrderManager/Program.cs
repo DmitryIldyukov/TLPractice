@@ -1,6 +1,4 @@
-﻿using System.Threading.Channels;
-
-namespace OrderManager;
+﻿namespace OrderManager;
 
 internal class Program
 {
