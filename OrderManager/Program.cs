@@ -21,7 +21,7 @@ internal class Program
     static void OrderDelivery( Order order )
     {
         Console.WriteLine( $"{order.CustomerName}! Ваш заказ {order.ProductName} в количестве {order.Quantity} оформлен! " +
-                $"Ожидайте доставку по адресу {order.Address} к {DateTime.UtcNow.AddDays( 3 ).ToLocalTime()}" );
+                $"Ожидайте доставку по адресу {order.Address} к {DateTime.UtcNow.AddDays( 3 ).ToLocalTime().ToShortDateString()}" );
     }
 
     // Вынес в отдельный метод, т.к. в теории тут будет выполняться множество других методов
@@ -46,7 +46,7 @@ internal class Program
         while ( !int.TryParse( Console.ReadLine(), out quantity ) || quantity <= 0 )
             Console.WriteLine( $"Неверный ввод. Введите целое положительное число: " );
 
-        Console.Write( "Введите имя получателя: " );
+        Console.Write( "Введите Ваше имя: " );
         string customerName = Console.ReadLine();
 
         Console.Write( "Введите адрес доставки: " );
