@@ -14,6 +14,6 @@ public class Order
         Quantity = quantity;
         CustomerName = customerName;
         Address = address;
-        DeliveryDate = DateTime.UtcNow.AddDays( 3 ).ToLocalTime();
+        DeliveryDate = DateTime.UtcNow.AddDays( 3 );
     }
 }

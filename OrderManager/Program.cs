@@ -18,7 +18,7 @@ internal class Program
     static void OrderDelivery( Order order )
     {
         Console.WriteLine( $"{order.CustomerName}! Ваш заказ {order.ProductName} в количестве {order.Quantity} оформлен! " +
-                $"Ожидайте доставку по адресу {order.Address} к {order.DeliveryDate.ToShortDateString()}." );
+                $"Ожидайте доставку по адресу {order.Address} к {order.DeliveryDate.ToLocalTime().ToShortDateString()}." );
     }
 
     static void OrderCancelation( Order order )
