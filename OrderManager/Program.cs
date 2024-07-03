@@ -15,14 +15,12 @@ internal class Program
         OrderCancelation( order );
     }
 
-    // Вынес в отдельный метод, т.к. в теории тут будет выполняться множество других методов
     static void OrderDelivery( Order order )
     {
         Console.WriteLine( $"{order.CustomerName}! Ваш заказ {order.ProductName} в количестве {order.Quantity} оформлен! " +
-                $"Ожидайте доставку по адресу {order.Address} к {DateTime.UtcNow.AddDays( 3 ).ToLocalTime().ToShortDateString()}" );
+                $"Ожидайте доставку по адресу {order.Address} к {order.DeliveryDate.ToShortDateString()}." );
     }
 
-    // Вынес в отдельный метод, т.к. в теории тут будет выполняться множество других методов
     static void OrderCancelation( Order order )
     {
         Console.WriteLine( $"{order.CustomerName}, Ваш заказ {order.ProductName} в количестве {order.Quantity} отменен." );
@@ -38,12 +36,9 @@ internal class Program
     {
         string productName = GetNonEmptyStringFromConsole( "Введите название товара: ", "Неверный ввод. Название товара не может быть пустым. Попробуйте снова." );
 
-        Console.Write( "Введите количество товара: " );
-        int quantity;
-        while ( !int.TryParse( Console.ReadLine(), out quantity ) || quantity <= 0 )
-            Console.WriteLine( $"Неверный ввод. Введите целое положительное число: " );
+        int quantity = GetValidProductQuantity( "Введите количество товара: ", "Неверный ввод. Введите целое положительное число. Попробуйте снова." );
 
-        string customerName = GetNonEmptyStringFromConsole("Введите Ваше имя: ", "Неверный ввод. Имя не может быть пустым. Попробуйте снова." );
+        string customerName = GetNonEmptyStringFromConsole( "Введите Ваше имя: ", "Неверный ввод. Имя не может быть пустым. Попробуйте снова." );
 
         string address = GetNonEmptyStringFromConsole( "Введите адрес доставки: ", "Неверный ввод. Адрес доставки не может быть пустым. Попробуйте снова." );
 
@@ -53,36 +48,38 @@ internal class Program
     static string GetNonEmptyStringFromConsole( string message, string errorMessage )
     {
         string input;
-        do
+
+        while ( true )
         {
             Console.Write( message );
             input = Console.ReadLine();
 
-            if ( string.IsNullOrWhiteSpace( input ) )
-                Console.WriteLine( errorMessage );
+            if ( !string.IsNullOrWhiteSpace( input ) )
+            {
+                break;
+            }
 
-        } while ( string.IsNullOrWhiteSpace( input ) );
+            Console.WriteLine( errorMessage );
+        }
 
         return input;
     }
-}
 
-public class Order
-{
-    public Order( string productName,
-                  int quantity,
-                  string customerName,
-                  string address
-    )
+    static int GetValidProductQuantity( string message, string errorMessage )
     {
-        ProductName = productName;
-        Quantity = quantity;
-        CustomerName = customerName;
-        Address = address;
-    }
+        int quantity;
 
-    public string ProductName { get; private set; }
-    public int Quantity { get; private set; }
-    public string CustomerName { get; private set; }
-    public string Address { get; private set; }
+        while ( true )
+        {
+            Console.Write( message );
+            if ( int.TryParse( Console.ReadLine(), out quantity ) && quantity > 0 )
+            {
+                break;
+            }
+
+            Console.WriteLine( errorMessage );
+        }
+
+        return quantity;
+    }
 }
