@@ -45,7 +45,9 @@ internal class Program
             input = Console.ReadLine();
 
             if ( string.IsNullOrWhiteSpace( input ) )
+            {
                 Console.WriteLine( errorMessage );
+            }
 
         } while ( string.IsNullOrWhiteSpace( input ) );
 
@@ -77,7 +79,9 @@ internal class Program
             Console.WriteLine( e.Message );
             Console.Write( $"Хотите ли вы добавить перевод для слова \'{word}\'? Y/N: " );
             if ( Console.ReadLine().ToLower().Trim() == "y" )
+            {
                 AddTranslate( word );
+            }
         }
     }
 
@@ -86,13 +90,17 @@ internal class Program
         Console.WriteLine( "Все доступные переводы:" );
 
         foreach ( var record in dictionaryService.GetAllTranslations() )
+        {
             Console.WriteLine( record );
+        }
     }
 
     public static void AddTranslate( string word = null )
     {
         if ( word == null )
+        {
             word = GetNonEmptyStringFromConsole( "Введите слово, которому хотите добавить перевод: " );
+        }
 
         string wordTranslate = GetNonEmptyStringFromConsole( $"Введите перевод для слова \'{word}\': " );
 

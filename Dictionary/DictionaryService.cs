@@ -15,7 +15,9 @@ public class DictionaryService
     private void GetWordsFromFile()
     {
         if ( !File.Exists( _fileName ) )
+        {
             File.Create( _fileName ).Close();
+        }
 
         string[] records = File.ReadAllLines( _fileName );
         foreach ( string record in records )
@@ -27,7 +29,9 @@ public class DictionaryService
                 words[ 0 ] = words[ 0 ].ToLower().Trim();
                 words[ 1 ] = words[ 1 ].ToLower().Trim();
                 if ( RecordCanBeAdded( words[ 0 ], words[ 1 ] ) )
+                {
                     _dictionary.Add( words[ 0 ], words[ 1 ] );
+                }
             }
         }
     }
@@ -53,11 +57,15 @@ public class DictionaryService
         word = word.ToLower().Trim();
 
         if ( _dictionary.TryGetValue( word, out var translate ) )
+        {
             return translate;
+        }
 
         var key = _dictionary.FirstOrDefault( rec => rec.Value == word ).Key;
         if ( key != null )
+        {
             return key;
+        }
 
         throw new RecordNotFoundException( $"Слово или его перевод не найдены." );
     }
@@ -74,7 +82,9 @@ public class DictionaryService
         wordTranslate = wordTranslate.ToLower().Trim();
 
         if ( !RecordCanBeAdded( word, wordTranslate ) )
+        {
             throw new RecordAlreadyExistException( "Слово или его перевод уже существуют в словаре." );
+        }
 
         _dictionary.Add( word, wordTranslate );
         File.AppendAllLines( _fileName, new[] { $"{word}/{wordTranslate}" } );
