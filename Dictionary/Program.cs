@@ -36,24 +36,6 @@ internal class Program
         }
     }
 
-    static string GetNonEmptyStringFromConsole( string message, string errorMessage = "Неверный ввод. Введенная строка не может быть пустой. Попробуйте снова." )
-    {
-        string input;
-        do
-        {
-            Console.Write( message );
-            input = Console.ReadLine();
-
-            if ( string.IsNullOrWhiteSpace( input ) )
-            {
-                Console.WriteLine( errorMessage );
-            }
-
-        } while ( string.IsNullOrWhiteSpace( input ) );
-
-        return input;
-    }
-
     public static void ShowMenu()
     {
         Console.WriteLine( "----------------------------------------------" );
@@ -85,16 +67,6 @@ internal class Program
         }
     }
 
-    public static void GetAllTranslates()
-    {
-        Console.WriteLine( "Все доступные переводы:" );
-
-        foreach ( var record in dictionaryService.GetAllTranslations() )
-        {
-            Console.WriteLine( record );
-        }
-    }
-
     public static void AddTranslate( string word = null )
     {
         if ( word == null )
@@ -121,8 +93,38 @@ internal class Program
         }
     }
 
+    public static void GetAllTranslates()
+    {
+        Console.WriteLine( "Все доступные переводы:" );
+
+        foreach ( var record in dictionaryService.GetAllTranslations() )
+        {
+            Console.WriteLine( record );
+        }
+    }
+
     public static void Quit()
     {
         Console.WriteLine( "Спасибо, что воспользовались приложением! До свидания!" );
+    }
+
+    static string GetNonEmptyStringFromConsole( string message, string errorMessage = "Неверный ввод. Введенная строка не может быть пустой. Попробуйте снова." )
+    {
+        string input;
+
+        while ( true )
+        {
+            Console.Write( message );
+            input = Console.ReadLine();
+
+            if ( !string.IsNullOrWhiteSpace( input ) )
+            {
+                break;
+            }
+
+            Console.WriteLine( errorMessage );
+        }
+
+        return input;
     }
 }
