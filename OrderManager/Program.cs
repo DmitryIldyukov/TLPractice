@@ -15,23 +15,6 @@ internal class Program
         OrderCancelation( order );
     }
 
-    static void OrderDelivery( Order order )
-    {
-        Console.WriteLine( $"{order.CustomerName}! Ваш заказ {order.ProductName} в количестве {order.Quantity} оформлен! " +
-                $"Ожидайте доставку по адресу {order.Address} к {order.DeliveryDate.ToLocalTime().ToShortDateString()}." );
-    }
-
-    static void OrderCancelation( Order order )
-    {
-        Console.WriteLine( $"{order.CustomerName}, Ваш заказ {order.ProductName} в количестве {order.Quantity} отменен." );
-    }
-
-    static bool OrderConfirm( Order order )
-    {
-        Console.Write( $"Здравствуйте, {order.CustomerName}, вы заказали {order.Quantity} {order.ProductName} на адрес {order.Address}, все верно? Y/N: " );
-        return Console.ReadLine().ToLower() == "y";
-    }
-
     static Order CreateOrder()
     {
         string productName = GetNonEmptyStringFromConsole( "Введите название товара: ", "Неверный ввод. Название товара не может быть пустым. Попробуйте снова." );
@@ -42,7 +25,7 @@ internal class Program
 
         string address = GetNonEmptyStringFromConsole( "Введите адрес доставки: ", "Неверный ввод. Адрес доставки не может быть пустым. Попробуйте снова." );
 
-        return new Order( productName: productName, quantity: quantity, customerName: customerName, address: address );
+        return new Order( productName, quantity, customerName, address );
     }
 
     static string GetNonEmptyStringFromConsole( string message, string errorMessage )
@@ -81,5 +64,22 @@ internal class Program
         }
 
         return quantity;
+    }
+
+    static bool OrderConfirm( Order order )
+    {
+        Console.Write( $"Здравствуйте, {order.CustomerName}, вы заказали {order.Quantity} {order.ProductName} на адрес {order.Address}, все верно? Y/N: " );
+        return Console.ReadLine().ToLower() == "y";
+    }
+
+    static void OrderDelivery( Order order )
+    {
+        Console.WriteLine( $"{order.CustomerName}! Ваш заказ {order.ProductName} в количестве {order.Quantity} оформлен! " +
+                $"Ожидайте доставку по адресу {order.Address} к {order.DeliveryDate.ToLocalTime().ToShortDateString()}." );
+    }
+
+    static void OrderCancelation( Order order )
+    {
+        Console.WriteLine( $"{order.CustomerName}, Ваш заказ {order.ProductName} в количестве {order.Quantity} отменен." );
     }
 }
