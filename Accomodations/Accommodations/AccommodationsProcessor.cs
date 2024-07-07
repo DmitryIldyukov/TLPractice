@@ -1,4 +1,4 @@
-using Accommodations.Commands;
+п»їusing Accommodations.Commands;
 using Accommodations.Dto;
 
 namespace Accommodations;
@@ -50,7 +50,7 @@ public static class AccommodationsProcessor
                     return;
                 }
 
-                // Добавил обработку невалидных дат
+                // Р”РѕР±Р°РІРёР» РѕР±СЂР°Р±РѕС‚РєСѓ РЅРµРІР°Р»РёРґРЅС‹С… РґР°С‚
                 if (!DateTime.TryParse( parts[ 3 ], out startDate ) )
                 {
                     throw new ArgumentException( "Invalid start date format. Expected format: 'dd/mm/yyyy'" );
@@ -61,7 +61,7 @@ public static class AccommodationsProcessor
                     throw new ArgumentException( "Invalid end date format. Expected format: 'dd/mm/yyyy'" );
                 }
 
-                // Добавил обработку невалидной валюты (выбрасывается ArgumentException)
+                // Р”РѕР±Р°РІРёР» РѕР±СЂР°Р±РѕС‚РєСѓ РЅРµРІР°Р»РёРґРЅРѕР№ РІР°Р»СЋС‚С‹ (РІС‹Р±СЂР°СЃС‹РІР°РµС‚СЃСЏ ArgumentException)
                 if ( !Enum.TryParse(parts[5], true, out currency ))
                 {
                     throw new ArgumentException( $"Invalid currency {parts[ 5 ]}." );
@@ -98,7 +98,7 @@ public static class AccommodationsProcessor
                 break;
 
             case "undo":
-                // Добавил проверку на пустой массив команд перед отменой команды
+                // Р”РѕР±Р°РІРёР» РїСЂРѕРІРµСЂРєСѓ РЅР° РїСѓСЃС‚РѕР№ РјР°СЃСЃРёРІ РєРѕРјР°РЅРґ РїРµСЂРµРґ РѕС‚РјРµРЅРѕР№ РєРѕРјР°РЅРґС‹
                 if (!_executedCommands.Any())
                 {
                     Console.WriteLine("Command list is empty.");
@@ -116,7 +116,7 @@ public static class AccommodationsProcessor
                     Console.WriteLine("Invalid arguments for 'find'. Expected format: 'find <BookingId>'");
                     return;
                 }
-                // Добавил проверку на валидный bookingId
+                // Р”РѕР±Р°РІРёР» РїСЂРѕРІРµСЂРєСѓ РЅР° РІР°Р»РёРґРЅС‹Р№ bookingId
                 if ( !Guid.TryParse( parts[ 1 ], out Guid id))
                 {
                     throw new ArgumentException( "Invalid bookingId format.");

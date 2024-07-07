@@ -1,4 +1,4 @@
-using Accommodations.Models;
+п»їusing Accommodations.Models;
 
 namespace Accommodations;
 
@@ -23,7 +23,7 @@ public class BookingService : IBookingService
 
     public Booking Book(int userId, string categoryName, DateTime startDate, DateTime endDate, Currency currency)
     {
-        // Исправил ошибку, когда дата заезда и дата выезда одинаковые
+        // РСЃРїСЂР°РІРёР» РѕС€РёР±РєСѓ, РєРѕРіРґР° РґР°С‚Р° Р·Р°РµР·РґР° Рё РґР°С‚Р° РІС‹РµР·РґР° РѕРґРёРЅР°РєРѕРІС‹Рµ
         if ( endDate <= startDate)
         {
             throw new ArgumentException("End date cannot be earlier than or equal to the start date");
@@ -83,7 +83,7 @@ public class BookingService : IBookingService
         Console.WriteLine($"Refund of {booking.Cost} {booking.Currency}");
         _bookings.Remove(booking);
         RoomCategory? category = _categories.FirstOrDefault(c => c.Name == booking.RoomCategory.Name);
-        // Добавил обработку случая, когда у номера своя категория, которая не входит в массив _categories
+        // Р”РѕР±Р°РІРёР» РѕР±СЂР°Р±РѕС‚РєСѓ СЃР»СѓС‡Р°СЏ, РєРѕРіРґР° Сѓ РЅРѕРјРµСЂР° СЃРІРѕСЏ РєР°С‚РµРіРѕСЂРёСЏ, РєРѕС‚РѕСЂР°СЏ РЅРµ РІС…РѕРґРёС‚ РІ РјР°СЃСЃРёРІ _categories
         if (category != null)
         {
             category.AvailableRooms++;
@@ -123,7 +123,7 @@ public class BookingService : IBookingService
             throw new ArgumentException( "End date cannot be earlier than or equal to the start date" );
         }
 
-        // Исправил ошибку при вычислении дней до прибытия
+        // РСЃРїСЂР°РІРёР» РѕС€РёР±РєСѓ РїСЂРё РІС‹С‡РёСЃР»РµРЅРёРё РґРЅРµР№ РґРѕ РїСЂРёР±С‹С‚РёСЏ
         int daysBeforeArrival = Math.Max( ( booking.StartDate - DateTime.Now ).Days, 1 );
 
         return 5000.0m / daysBeforeArrival;
@@ -145,7 +145,7 @@ public class BookingService : IBookingService
 
     private static decimal CalculateBookingCost(decimal baseRate, int days, int userId, decimal currencyRate)
     {
-        // Исправил ошибку при вычислении итоговой суммы брони
+        // РСЃРїСЂР°РІРёР» РѕС€РёР±РєСѓ РїСЂРё РІС‹С‡РёСЃР»РµРЅРёРё РёС‚РѕРіРѕРІРѕР№ СЃСѓРјРјС‹ Р±СЂРѕРЅРё
         decimal cost = baseRate / currencyRate * days;
         decimal totalCost = cost - cost * CalculateDiscount(userId);
         return totalCost;
