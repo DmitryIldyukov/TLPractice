@@ -23,9 +23,10 @@ public class BookingService : IBookingService
 
     public Booking Book(int userId, string categoryName, DateTime startDate, DateTime endDate, Currency currency)
     {
-        if (endDate < startDate)
+        // Исправил ошибку, когда дата заезда и дата выезда одинаковые
+        if ( endDate <= startDate)
         {
-            throw new ArgumentException("End date cannot be earlier than start date");
+            throw new ArgumentException("End date cannot be earlier than or equal to the start date");
         }
 
         RoomCategory? selectedCategory = _categories.FirstOrDefault(c => c.Name == categoryName);
@@ -76,13 +77,17 @@ public class BookingService : IBookingService
 
         if (booking.StartDate <= DateTime.Now)
         {
-            throw new ArgumentException("Start date cannot be earlier than now date");
+            throw new ArgumentException( "End date cannot be earlier than or equal to the start date" );
         }
 
         Console.WriteLine($"Refund of {booking.Cost} {booking.Currency}");
         _bookings.Remove(booking);
         RoomCategory? category = _categories.FirstOrDefault(c => c.Name == booking.RoomCategory.Name);
-        category.AvailableRooms++;
+        // Добавил обработку случая, когда у номера своя категория, которая не входит в массив _categories
+        if (category != null)
+        {
+            category.AvailableRooms++;
+        }
     }
 
     private static decimal CalculateDiscount(int userId)
@@ -115,10 +120,11 @@ public class BookingService : IBookingService
     {
         if (booking.StartDate <= DateTime.Now)
         {
-            throw new ArgumentException("Start date cannot be earlier than now date");
+            throw new ArgumentException( "End date cannot be earlier than or equal to the start date" );
         }
 
-        int daysBeforeArrival = (DateTime.Now - booking.StartDate).Days;
+        // Исправил ошибку при вычислении дней до прибытия
+        int daysBeforeArrival = Math.Max( ( booking.StartDate - DateTime.Now ).Days, 1 );
 
         return 5000.0m / daysBeforeArrival;
     }
@@ -139,8 +145,9 @@ public class BookingService : IBookingService
 
     private static decimal CalculateBookingCost(decimal baseRate, int days, int userId, decimal currencyRate)
     {
-        decimal cost = baseRate * days;
-        decimal totalCost = cost - cost * CalculateDiscount(userId) * currencyRate;
+        // Исправил ошибку при вычислении итоговой суммы брони
+        decimal cost = baseRate / currencyRate * days;
+        decimal totalCost = cost - cost * CalculateDiscount(userId);
         return totalCost;
     }
 }

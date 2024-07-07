@@ -1,4 +1,3 @@
-using System.Globalization;
 using Accommodations.Commands;
 using Accommodations.Dto;
 
@@ -39,6 +38,8 @@ public static class AccommodationsProcessor
     {
         string[] parts = input.Split(' ');
         string commandName = parts[0];
+        DateTime startDate, endDate;
+        CurrencyDto currency;
 
         switch (commandName)
         {
@@ -49,14 +50,30 @@ public static class AccommodationsProcessor
                     return;
                 }
 
-                CurrencyDto currency = (CurrencyDto) Enum.Parse(typeof(CurrencyDto), parts[5], true);
+                // ƒобавил обработку невалидных дат
+                if (!DateTime.TryParse( parts[ 3 ], out startDate ) )
+                {
+                    throw new ArgumentException( "Invalid start date format. Expected format: 'dd/mm/yyyy'" );
+                }
+
+                if ( !DateTime.TryParse( parts[ 4 ], out endDate ) )
+                {
+                    throw new ArgumentException( "Invalid end date format. Expected format: 'dd/mm/yyyy'" );
+                }
+
+                // ƒобавил обработку невалидной валюты (выбрасываетс€ ArgumentException)
+                if ( !Enum.TryParse(parts[5], true, out currency ))
+                {
+                    throw new ArgumentException( $"Invalid currency {parts[ 5 ]}." );
+                }
+                
 
                 BookingDto bookingDto = new()
                 {
                     UserId = int.Parse(parts[1]),
                     Category = parts[2],
-                    StartDate = DateTime.Parse(parts[3]),
-                    EndDate = DateTime.Parse(parts[4]),
+                    StartDate = startDate,
+                    EndDate = endDate,
                     Currency = currency,
                 };
 
@@ -81,6 +98,12 @@ public static class AccommodationsProcessor
                 break;
 
             case "undo":
+                // ƒобавил проверку на пустой массив команд перед отменой команды
+                if (!_executedCommands.Any())
+                {
+                    Console.WriteLine("Command list is empty.");
+                    break;
+                }
                 _executedCommands[s_commandIndex].Undo();
                 _executedCommands.Remove(s_commandIndex);
                 s_commandIndex--;
@@ -93,7 +116,11 @@ public static class AccommodationsProcessor
                     Console.WriteLine("Invalid arguments for 'find'. Expected format: 'find <BookingId>'");
                     return;
                 }
-                Guid id = Guid.Parse(parts[1]);
+                // ƒобавил проверку на валидный bookingId
+                if ( !Guid.TryParse( parts[ 1 ], out Guid id))
+                {
+                    throw new ArgumentException( "Invalid bookingId format.");
+                }
                 FindBookingByIdCommand findCommand = new(_bookingService, id);
                 findCommand.Execute();
                 break;
@@ -104,8 +131,8 @@ public static class AccommodationsProcessor
                     Console.WriteLine("Invalid arguments for 'search'. Expected format: 'search <StartDate> <EndDate> <CategoryName>'");
                     return;
                 }
-                DateTime startDate = DateTime.Parse(parts[1]);
-                DateTime endDate = DateTime.Parse(parts[2]);
+                startDate = DateTime.Parse(parts[1]);
+                endDate = DateTime.Parse(parts[2]);
                 string categoryName = parts[3];
                 SearchBookingsCommand searchCommand = new(_bookingService, startDate, endDate, categoryName);
                 searchCommand.Execute();
