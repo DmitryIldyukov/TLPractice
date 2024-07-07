@@ -68,6 +68,12 @@ public class GameManager : IGameManager
     {
         int round = 0;
         List<IFighter> fighters = _fighterService.GetFighters();
+        int fighterCount = fighters.Count;
+        if ( fighterCount < 2 )
+        {
+            ShowFighterCountError( fighterCount );
+            return;
+        }
         IFighter winner = null;
         Console.WriteLine( "Бой начинается!" );
         while ( fighters.Count( f => f.IsAlive ) > 1 )
@@ -96,7 +102,7 @@ public class GameManager : IGameManager
 
         winner = fighters.FirstOrDefault( f => f.IsAlive );
 
-        Console.WriteLine( winner != null ? $"{winner.Name} победил!!!" : "Победитель не определен." );
+        Console.WriteLine( $"{winner.Name} победил!!!" );
     }
 
     private void ShowFighters( string message = "Список бойцов:" )
@@ -136,5 +142,13 @@ public class GameManager : IGameManager
     {
         Console.WriteLine( "Нажмите любую клавишу, чтобы продолжить." );
         Console.ReadKey();
+    }
+
+    private void ShowFighterCountError( int fighterCount )
+    {
+        Console.WriteLine( "Невозможно начать битву." );
+        Console.WriteLine( $"Минимальное количество бойцов для битвы: 2." );
+        Console.WriteLine( $"Текущее количество бойцов: {fighterCount}." );
+        Console.WriteLine( $"Добавьте еще {2 - fighterCount} бойца/бойцов." );
     }
 }
