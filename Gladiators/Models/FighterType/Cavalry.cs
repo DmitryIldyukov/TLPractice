@@ -2,7 +2,7 @@
 
 public class Cavalry : IFighterType
 {
-    public string Name => "Конница";
+    public string Name => "Кавалерия";
     public int Health => 30;
     public int Strength => 20;
 }

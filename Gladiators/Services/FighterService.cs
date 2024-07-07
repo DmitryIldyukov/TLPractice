@@ -28,15 +28,15 @@ public class FighterService : IFighterService
 
     private IFighterType ChooseFighterType()
     {
-        bool isRightChoise = false;
+        bool isValidChoise = false;
         IFighterType fighterType = null;
-        while ( !isRightChoise )
+        while ( !isValidChoise )
         {
-            isRightChoise = true;
+            isValidChoise = true;
             string message = "Выберите класс бойца:\n" +
                 "1 - Рыцарь\n" +
                 "2 - Наемний\n" +
-                "3 - Конница\n" +
+                "3 - Кавалерия\n" +
                 "Ввод: ";
             switch ( GetNonEmptyStringFromConsole( message ) )
             {
@@ -51,7 +51,7 @@ public class FighterService : IFighterService
                     break;
                 default:
                     Console.WriteLine( "Неверный ввод. Попробуйте снова." );
-                    isRightChoise = false;
+                    isValidChoise = false;
                     break;
             };
         }
@@ -61,11 +61,11 @@ public class FighterService : IFighterService
 
     private IRace ChooseRace()
     {
-        bool isRightChoise = false;
+        bool isValidChoise = false;
         IRace race = null;
-        while ( !isRightChoise )
+        while ( !isValidChoise )
         {
-            isRightChoise = true;
+            isValidChoise = true;
             string message = "Выберите расу бойца:\n" +
                 "1 - Человек\n" +
                 "2 - Эльф\n" +
@@ -88,7 +88,7 @@ public class FighterService : IFighterService
                     break;
                 default:
                     Console.WriteLine( "Неверный ввод. Попробуйте снова." );
-                    isRightChoise = false;
+                    isValidChoise = false;
                     break;
             };
         }
@@ -98,11 +98,11 @@ public class FighterService : IFighterService
 
     private IWeapon ChooseWeapon()
     {
-        bool isRightChoise = false;
+        bool isValidChoise = false;
         IWeapon weapon = null;
-        while ( !isRightChoise )
+        while ( !isValidChoise )
         {
-            isRightChoise = true;
+            isValidChoise = true;
             string message = "Выберите оружие бойца:\n" +
                 "1 - Без оружия\n" +
                 "2 - Лук\n" +
@@ -129,7 +129,7 @@ public class FighterService : IFighterService
                     break;
                 default:
                     Console.WriteLine( "Неверный ввод. Попробуйте снова." );
-                    isRightChoise = false;
+                    isValidChoise = false;
                     break;
             };
         }
@@ -139,11 +139,11 @@ public class FighterService : IFighterService
 
     private IArmor ChooseArmor()
     {
-        bool isRightChoise = false;
+        bool isValidChoise = false;
         IArmor armor = null;
-        while ( !isRightChoise )
+        while ( !isValidChoise )
         {
-            isRightChoise = true;
+            isValidChoise = true;
             string message = "Выберите броню бойца:\n" +
                 "1 - Без брони\n" +
                 "2 - Легкая броня\n" +
@@ -166,7 +166,7 @@ public class FighterService : IFighterService
                     break;
                 default:
                     Console.WriteLine( "Неверный ввод. Попробуйте снова." );
-                    isRightChoise = false;
+                    isValidChoise = false;
                     break;
             };
         }

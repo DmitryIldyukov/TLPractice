@@ -90,7 +90,7 @@ public class GameManager : IGameManager
                 }
 
                 IFighter opponent = fighters.Where( f => f != fighter && f.IsAlive ).OrderBy( f => Random.Shared.Next() ).First();
-                AttackProcess( fighter, opponent );
+                Attack( fighter, opponent );
             }
 
             WaitForKeyPress();
@@ -130,7 +130,7 @@ public class GameManager : IGameManager
         Console.WriteLine( "Бойцы восстановили свои силы." );
     }
 
-    private void AttackProcess( IFighter fighter, IFighter opponent )
+    private void Attack( IFighter fighter, IFighter opponent )
     {
         int damage = fighter.CalculateDamage();
         int damageTaken = opponent.TakeDamage( damage );
