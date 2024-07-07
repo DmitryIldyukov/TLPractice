@@ -41,7 +41,26 @@ public class Fighter : IFighter
         ArmorPoints = Race.Armor + Armor.Armor;
     }
 
-    public int CalculateDamage() => Race.Strength + FighterType.Strength + Weapon.Damage;
+    public int CalculateDamage()
+    {
+        const double MinMultiplierDamage = 0.80;
+        const double MaxMultiplierDamage = 1.10;
+        const int CriticalPercentChance = 25;
+
+        int fighterDamage = Race.Strength + FighterType.Strength + Weapon.Damage;
+
+        double attackMultiplier = Random.Shared.Next( ( int )( MinMultiplierDamage * 100 ), ( int )( MaxMultiplierDamage * 100 + 1 ) ) / 100;
+        fighterDamage = ( int )( fighterDamage * attackMultiplier );
+
+        bool isCriticalAttack = CriticalPercentChance > 100 ? true : Random.Shared.Next( 1, 101 ) < CriticalPercentChance;
+
+        if ( isCriticalAttack )
+        {
+            fighterDamage *= 2;
+        }
+
+        return fighterDamage;
+    }
 
     public int TakeDamage( int opponentDamage )
     {
