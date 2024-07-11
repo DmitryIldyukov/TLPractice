@@ -46,8 +46,8 @@ public static class AccommodationsProcessor
             case "book":
                 if (parts.Length != 6)
                 {
-                    Console.WriteLine("Invalid number of arguments for booking.");
-                    return;
+                    // Выбрасываю исключение
+                    throw new ArgumentException( "Invalid number of arguments for booking." );
                 }
 
                 // Добавил обработку невалидных дат
@@ -67,7 +67,6 @@ public static class AccommodationsProcessor
                     throw new ArgumentException( $"Invalid currency {parts[ 5 ]}." );
                 }
                 
-
                 BookingDto bookingDto = new()
                 {
                     UserId = int.Parse(parts[1]),
@@ -84,13 +83,16 @@ public static class AccommodationsProcessor
                 break;
 
             case "cancel":
-                if (parts.Length != 2)
+                // Выбрасываю исключение
+                if ( parts.Length != 2)
                 {
-                    Console.WriteLine("Invalid number of arguments for canceling.");
-                    return;
+                    throw new ArgumentException( "Invalid number of arguments for canceling." );
                 }
-
-                Guid bookingId = Guid.Parse(parts[1]);
+                // Выбрасываю исключение
+                if ( !Guid.TryParse( parts[ 1 ], out Guid bookingId ) )
+                {
+                    throw new ArgumentException( "Invalid bookingId." );
+                }
                 CancelBookingCommand cancelCommand = new(_bookingService, bookingId);
                 cancelCommand.Execute();
                 _executedCommands.Add(++s_commandIndex, cancelCommand);
@@ -99,22 +101,21 @@ public static class AccommodationsProcessor
 
             case "undo":
                 // Добавил проверку на пустой массив команд перед отменой команды
-                if (!_executedCommands.Any())
+                if (_executedCommands.Count() == 0)
                 {
-                    Console.WriteLine("Command list is empty.");
-                    break;
+                    throw new InvalidOperationException( "Command list is empty." );
                 }
                 _executedCommands[s_commandIndex].Undo();
                 _executedCommands.Remove(s_commandIndex);
                 s_commandIndex--;
                 Console.WriteLine("Last command undone.");
-
                 break;
+
             case "find":
+                // Выбрасываю исключение
                 if (parts.Length != 2)
                 {
-                    Console.WriteLine("Invalid arguments for 'find'. Expected format: 'find <BookingId>'");
-                    return;
+                    throw new ArgumentException( "Invalid arguments for 'find'. Expected format: 'find <BookingId>'" );
                 }
                 // Добавил проверку на валидный bookingId
                 if ( !Guid.TryParse( parts[ 1 ], out Guid id))
@@ -126,13 +127,20 @@ public static class AccommodationsProcessor
                 break;
 
             case "search":
-                if (parts.Length != 4)
+                // Выбрасываю исключение
+                if ( parts.Length != 4)
                 {
-                    Console.WriteLine("Invalid arguments for 'search'. Expected format: 'search <StartDate> <EndDate> <CategoryName>'");
-                    return;
+                    throw new ArgumentException( "Invalid arguments for 'search'. Expected format: 'search <StartDate> <EndDate> <CategoryName>'" );
                 }
-                startDate = DateTime.Parse(parts[1]);
-                endDate = DateTime.Parse(parts[2]);
+                if ( !DateTime.TryParse( parts[ 1 ], out startDate ) )
+                {
+                    throw new ArgumentException( "Invalid start date format. Expected format: 'dd/mm/yyyy'" );
+                }
+
+                if ( !DateTime.TryParse( parts[ 2 ], out endDate ) )
+                {
+                    throw new ArgumentException( "Invalid end date format. Expected format: 'dd/mm/yyyy'" );
+                }
                 string categoryName = parts[3];
                 SearchBookingsCommand searchCommand = new(_bookingService, startDate, endDate, categoryName);
                 searchCommand.Execute();
