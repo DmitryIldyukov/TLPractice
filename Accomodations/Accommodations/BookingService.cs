@@ -109,6 +109,11 @@ public class BookingService : IBookingService
 
     public IEnumerable<Booking> SearchBookings( DateTime startDate, DateTime endDate, string categoryName )
     {
+        if ( startDate >= endDate )
+        {
+            throw new ArgumentException( "End date cannot be earlier than or equal to the start date." );
+        }
+
         IQueryable<Booking> query = _bookings.AsQueryable();
 
         query = query.Where( b => b.StartDate >= startDate );
@@ -127,7 +132,7 @@ public class BookingService : IBookingService
     {
         if ( booking.StartDate <= DateTime.Now )
         {
-            throw new ArgumentException( "End date cannot be earlier than or equal to the start date" );
+            throw new ArgumentException( "Start date must be later than today." );
         }
 
         // Исправил ошибку при вычислении дней до прибытия

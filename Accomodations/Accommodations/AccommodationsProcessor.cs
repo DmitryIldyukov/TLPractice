@@ -141,6 +141,12 @@ public static class AccommodationsProcessor
                 {
                     throw new ArgumentException( "Invalid end date format. Expected format: 'dd/mm/yyyy'" );
                 }
+
+                if (startDate < endDate)
+                {
+                    throw new ArgumentException( "Invalid number of arguments for booking." );
+                }
+
                 string categoryName = parts[ 3 ];
                 SearchBookingsCommand searchCommand = new( _bookingService, startDate, endDate, categoryName );
                 searchCommand.Execute();
