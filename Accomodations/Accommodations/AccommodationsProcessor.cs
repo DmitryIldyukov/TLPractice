@@ -27,7 +27,7 @@ public static class AccommodationsProcessor
             {
                 ProcessCommand( input );
             }
-            catch ( ArgumentException ex )
+            catch ( Exception ex ) when ( ex is ArgumentException || ex is InvalidOperationException )
             {
                 Console.WriteLine( $"Error: {ex.Message}" );
             }
