@@ -8,7 +8,7 @@ using CarFactory.Models.GearBox;
 
 namespace CarFactory.Storage;
 
-internal class CarStorage : ICarStorage
+public class CarStorage : ICarStorage
 {
     private static ICarBrand[] _carBrands;
     private static ICarModel[] _carModels;
