@@ -3,4 +3,9 @@
 public class Red : IColor
 {
     public string Name => "Красный";
+
+    public override string ToString()
+    {
+        return Name;
+    }
 }

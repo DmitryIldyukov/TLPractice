@@ -2,14 +2,14 @@
 
 namespace CarFactory.Models.CarModels;
 
-public class Priora : ICarModel
+public class M3 : ICarModel
 {
-    public Priora( Lada carBrand )
+    public M3( BMW carBrand )
     {
         CarBrand = carBrand;
     }
 
-    public string Name => "Приора";
+    public string Name => "M3";
 
     public ICarBrand CarBrand { get; init; }
 

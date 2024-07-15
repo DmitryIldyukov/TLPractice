@@ -7,7 +7,7 @@ public class CarFactoryHandler : ICarFactoryHandler
 {
     private readonly ICarService _carService;
 
-    public CarFactoryHandler(ICarService carService)
+    public CarFactoryHandler( ICarService carService )
     {
         _carService = carService;
     }
@@ -23,14 +23,21 @@ public class CarFactoryHandler : ICarFactoryHandler
             switch ( input )
             {
                 case "1":
-                    CreateCar();
+                    try
+                    {
+                        CreateCar();
+                    }
+                    catch ( Exception e )
+                    {
+                        Console.WriteLine( $"Произошла ошибка. {e.Message}" );
+                    }
                     break;
                 case "2":
-                    ShowCarInformation();
+                    ShowCarsInformation();
                     break;
                 case "exit":
                     isExit = true;
-                    Console.WriteLine("До свидания!");
+                    Console.WriteLine( "До свидания!" );
                     break;
             }
         }
@@ -46,30 +53,31 @@ public class CarFactoryHandler : ICarFactoryHandler
     {
         Console.WriteLine( "Доступные команды:" );
         Console.WriteLine( "1 - Создать автомобиль" );
-        Console.WriteLine( "2 - Показать информацию об автомобиле" );
+        Console.WriteLine( "2 - Показать информацию об автомобилях" );
         Console.WriteLine( "exit - Я намечтался (Выход)" );
+        Console.Write( "Ввод: " );
     }
 
     private void CreateCar()
     {
         ICar car = _carService.CreateCar();
-        Console.WriteLine($"Автомобиль {car.CarModel.Name} успешно создан!");
+        Console.WriteLine( $"Автомобиль {car.CarModel.CarBrand.Name} {car.CarModel.Name} успешно создан!" );
     }
 
-    private void ShowCarInformation()
+    private void ShowCarsInformation()
     {
         List<ICar> cars = _carService.GetCars().ToList();
 
-        if (cars.Count == 0)
+        if ( cars.Count == 0 )
         {
-            Console.WriteLine("Список автомобилей пуст.");
+            Console.WriteLine( "Список автомобилей пуст." );
             return;
         }
 
-        Console.WriteLine("Список автомобилей:");
-        foreach (ICar car in cars)
+        Console.WriteLine( "Список автомобилей:" );
+        foreach ( ICar car in cars )
         {
-            car.ToString();
+            Console.WriteLine( car );
         }
     }
 }
