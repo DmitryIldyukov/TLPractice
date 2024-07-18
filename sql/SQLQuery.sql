@@ -1,62 +1,66 @@
 ﻿USE HotelManager;
 
-CREATE TABLE dbo.rooms
-(
-	room_id INT IDENTITY(1,1) NOT NULL,
-	room_number INT NOT NULL,
-	room_type NVARCHAR(50) NOT NULL,
-	price_per_night MONEY NOT NULL,
-	availability BIT NOT NULL,
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'rooms')
+	CREATE TABLE dbo.rooms
+	(
+		room_id INT IDENTITY(1,1) NOT NULL,
+		room_number INT NOT NULL,
+		room_type NVARCHAR(50) NOT NULL,
+		price_per_night MONEY NOT NULL,
+		availability BIT NOT NULL,
 
-	CONSTRAINT PK_rooms_room_id PRIMARY KEY (room_id)
-)
+		CONSTRAINT PK_rooms_room_id PRIMARY KEY (room_id)
+	)
 
-CREATE TABLE dbo.customers
-(
-	customer_id INT IDENTITY(1,1) NOT NULL,
-	first_name NVARCHAR(50) NOT NULL,
-	last_name NVARCHAR(50) NOT NULL,
-	email NVARCHAR(254) NOT NULL,
-	phone_number NVARCHAR(15) NOT NULL,
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'customers')
+	CREATE TABLE dbo.customers
+	(
+		customer_id INT IDENTITY(1,1) NOT NULL,
+		first_name NVARCHAR(50) NOT NULL,
+		last_name NVARCHAR(50) NOT NULL,
+		email NVARCHAR(254) NOT NULL,
+		phone_number NVARCHAR(15) NOT NULL,
 
-	CONSTRAINT PK_customers_customer_id PRIMARY KEY (customer_id)
-)
+		CONSTRAINT PK_customers_customer_id PRIMARY KEY (customer_id)
+	)
 
-CREATE TABLE dbo.bookings
-(
-	booking_id INT IDENTITY(1,1) NOT NULL,
-	customer_id INT NOT NULL,
-	room_id INT NOT NULL,
-	check_in_date DATE NOT NULL,
-	check_out_date DATE NOT NULL,
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'bookings')
+	CREATE TABLE dbo.bookings
+	(
+		booking_id INT IDENTITY(1,1) NOT NULL,
+		customer_id INT NOT NULL,
+		room_id INT NOT NULL,
+		check_in_date DATE NOT NULL,
+		check_out_date DATE NOT NULL,
 
-	CONSTRAINT PK_bookings_booking_id PRIMARY KEY (booking_id),
-	CONSTRAINT FK_bookings_customer_id 
-		FOREIGN KEY (customer_id) REFERENCES dbo.customers (customer_id),
-	CONSTRAINT FK_bookings_room_id 
-		FOREIGN KEY (room_id) REFERENCES dbo.rooms (room_id)
-)
+		CONSTRAINT PK_bookings_booking_id PRIMARY KEY (booking_id),
+		CONSTRAINT FK_bookings_customer_id 
+			FOREIGN KEY (customer_id) REFERENCES dbo.customers (customer_id),
+		CONSTRAINT FK_bookings_room_id 
+			FOREIGN KEY (room_id) REFERENCES dbo.rooms (room_id)
+	)
 
-CREATE TABLE dbo.facilities
-(
-	facility_id INT IDENTITY(1,1) NOT NULL,
-	facility_name NVARCHAR(40) NOT NULL,
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'facilities')
+	CREATE TABLE dbo.facilities
+	(
+		facility_id INT IDENTITY(1,1) NOT NULL,
+		facility_name NVARCHAR(40) NOT NULL,
 
-	CONSTRAINT PK_facilities_facility_id PRIMARY KEY (facility_id)
-)
+		CONSTRAINT PK_facilities_facility_id PRIMARY KEY (facility_id)
+	)
 
-CREATE TABLE dbo.rooms_to_facilities
-(
-	room_id INT NOT NULL,
-	facility_id INT NOT NULL,
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'rooms_to_facilities')
+	CREATE TABLE dbo.rooms_to_facilities
+	(
+		room_id INT NOT NULL,
+		facility_id INT NOT NULL,
 
-	CONSTRAINT PK_rooms_to_facilities_id PRIMARY KEY (room_id, facility_id),
-	CONSTRAINT FK_rooms_to_facilities_room_id 
-		FOREIGN KEY (room_id) REFERENCES dbo.rooms (room_id),
-	CONSTRAINT FK_rooms_to_facilities_facility_id 
-		FOREIGN KEY (facility_id) REFERENCES dbo.facilities (facility_id)
-)
-
+		CONSTRAINT PK_rooms_to_facilities_id PRIMARY KEY (room_id, facility_id),
+		CONSTRAINT FK_rooms_to_facilities_room_id 
+			FOREIGN KEY (room_id) REFERENCES dbo.rooms (room_id),
+		CONSTRAINT FK_rooms_to_facilities_facility_id 
+			FOREIGN KEY (facility_id) REFERENCES dbo.facilities (facility_id)
+	)
 
 INSERT INTO dbo.rooms (room_number, room_type, price_per_night, availability)
 VALUES
@@ -168,43 +172,29 @@ VALUES
 	(15, 9);
 
 -- Поиск всех доступных номеров для бронирования на сегодняшний день
-SELECT DISTINCT
-	r.room_id,
-	r.room_number,
-	r.room_type,
-	r.price_per_night
-FROM rooms as r
+SELECT DISTINCT r.* FROM rooms as r
 	JOIN bookings as b on r.room_id = b.room_id
 WHERE
 	GETDATE() NOT BETWEEN b.check_in_date AND b.check_out_date
 	AND r.availability = 1;
 
 -- Поиск всех клиентов, чьи фамилии начинаются с буквы 'S'
-SELECT *
-FROM customers as c
+SELECT * FROM customers as c
 WHERE c.last_name LIKE 'S%';
 
 -- Поиск всех бронирований для определенного клиента (по имени или электронному адресу).
-SELECT
-	b.booking_id,
-	b.room_id,
-	b.customer_id
-FROM bookings as b
+SELECT b.* FROM bookings as b
 	JOIN customers as c on b.customer_id = c.customer_id
 WHERE c.email = 'alice.johnson@example.com';
 
 -- Найдите все бронирования для определенного номера.
-SELECT *
-FROM bookings as b
-WHERE b.room_id = 1;
+SELECT b.* FROM bookings as b
+	JOIN rooms as r on b.room_id = r.room_id
+WHERE r.room_number = 101;
 
 -- Поиск всех номеров, которые не забронированы на определенную дату.
-SELECT DISTINCT
-	r.room_id,
-	r.room_number,
-	r.room_type,
-	r.price_per_night,
-	r.availability
-FROM rooms as r
-	LEFT JOIN bookings as b on r.room_id = b.room_id
-WHERE '11.07.2024' NOT BETWEEN b.check_in_date AND b.check_out_date;
+SELECT * FROM rooms as r
+WHERE r.availability = 1 AND r.room_id NOT IN (
+	SELECT b.room_id FROM bookings as b
+	WHERE '11.07.2024' BETWEEN b.check_in_date AND b.check_out_date
+);
