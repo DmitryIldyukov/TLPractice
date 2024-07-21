@@ -142,7 +142,7 @@ public static class AccommodationsProcessor
                     throw new ArgumentException( "Invalid end date format. Expected format: 'dd/mm/yyyy'" );
                 }
 
-                if (startDate < endDate)
+                if ( startDate < endDate )
                 {
                     throw new ArgumentException( "Invalid number of arguments for booking." );
                 }
