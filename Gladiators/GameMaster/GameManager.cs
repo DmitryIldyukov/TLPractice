@@ -135,7 +135,7 @@ public class GameManager : IGameManager
         Console.WriteLine( $"{fighter.Name} атакует {opponent.Name} с силой равной {damage}." );
         if ( damageTaken < damage )
         {
-            Console.WriteLine( $"{opponent.Name} частично блокирует атаку, получает {damageTaken} урона и {( opponent.IsAlive ? "выживает" : "погибает" )}." );
+            Console.WriteLine( $"{opponent.Name} блокирует атаку, получает {damageTaken} урона и {( opponent.IsAlive ? "выживает" : "погибает" )}." );
         }
         else
         {

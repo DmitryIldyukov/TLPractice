@@ -65,11 +65,14 @@ public class Fighter : IFighter
 
     public int TakeDamage( int opponentDamage )
     {
-        const int MinDamage = 1;
+        const double ArmorConditionReductionFactor = 0.5;
+        const int MinArmorConditionLoss = 5;
 
         int startHealth = CurrentHealth;
-        // Броня не может полностью поглотить урон
-        int newHealth = CurrentHealth - Math.Max( opponentDamage - ArmorPoints, MinDamage );
+        double armorConditionPercentage = ( double )Armor.ArmorCondition / 100;
+        int newHealth = CurrentHealth - ( int )Math.Max( opponentDamage - ArmorPoints * armorConditionPercentage, 0 );
+
+        Armor.ReduceCondition( ( int )Math.Max( opponentDamage * ArmorConditionReductionFactor, MinArmorConditionLoss ) );
 
         if ( newHealth < 0 )
         {
@@ -82,7 +85,11 @@ public class Fighter : IFighter
         return damageDealt;
     }
 
-    public void Revive() => CurrentHealth = MaxHealth;
+    public void Revive()
+    {
+        CurrentHealth = MaxHealth;
+        Armor.Repair();
+    }
 
     public override string ToString()
     {
@@ -93,7 +100,8 @@ public class Fighter : IFighter
             $"Броня: {Armor.Name}\n" +
             $"Максимальное здоровье: {MaxHealth}\n" +
             $"Текущее здоровье: {CurrentHealth}\n" +
-            $"Броня: {ArmorPoints}\n" +
+            $"Очки брони: {ArmorPoints}\n" +
+            $"Состояние брони: {Armor.ArmorCondition}%\n" +
             $"Сила: {Strength}\n" +
             $"Состояние здоровья: {( IsAlive ? "Жив" : "Мертв" )}";
     }
