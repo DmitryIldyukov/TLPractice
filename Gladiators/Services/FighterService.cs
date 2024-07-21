@@ -174,7 +174,8 @@ public class FighterService : IFighterService
         return armor;
     }
 
-    private string GetNonEmptyStringFromConsole( string message,
+    private string GetNonEmptyStringFromConsole(
+        string message,
         string errorMessage = "Неверный ввод. Введенная строка не может быть пустой. Попробуйте снова." )
     {
         string input = string.Empty;

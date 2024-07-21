@@ -23,9 +23,12 @@ public class Fighter : IFighter
 
     public int MaxHealth { get; }
 
+    public int Strength => Race.Strength + FighterType.Strength + Weapon.Damage;
+
     public bool IsAlive => CurrentHealth > 0;
 
-    public Fighter( string name,
+    public Fighter(
+        string name,
         IFighterType fighterType,
         IRace race,
         IWeapon weapon,
@@ -47,12 +50,10 @@ public class Fighter : IFighter
         const double MaxMultiplierDamage = 1.10;
         const int CriticalPercentChance = 25;
 
-        int fighterDamage = Race.Strength + FighterType.Strength + Weapon.Damage;
+        double attackMultiplier = ( double )Random.Shared.Next( ( int )( MinMultiplierDamage * 100 ), ( int )( MaxMultiplierDamage * 100 + 1 ) ) / 100;
+        int fighterDamage = ( int )( Strength * attackMultiplier );
 
-        double attackMultiplier = Random.Shared.Next( ( int )( MinMultiplierDamage * 100 ), ( int )( MaxMultiplierDamage * 100 + 1 ) ) / 100;
-        fighterDamage = ( int )( fighterDamage * attackMultiplier );
-
-        bool isCriticalAttack = CriticalPercentChance > 100 ? true : Random.Shared.Next( 1, 101 ) < CriticalPercentChance;
+        bool isCriticalAttack = CriticalPercentChance > 100 || Random.Shared.Next( 1, 101 ) < CriticalPercentChance;
 
         if ( isCriticalAttack )
         {
@@ -64,8 +65,11 @@ public class Fighter : IFighter
 
     public int TakeDamage( int opponentDamage )
     {
+        const int MinDamage = 1;
+
         int startHealth = CurrentHealth;
-        int newHealth = CurrentHealth - ( Math.Max( opponentDamage - ArmorPoints, 1 ) );
+        // Броня не может полностью поглотить урон
+        int newHealth = CurrentHealth - Math.Max( opponentDamage - ArmorPoints, MinDamage );
 
         if ( newHealth < 0 )
         {
@@ -90,7 +94,7 @@ public class Fighter : IFighter
             $"Максимальное здоровье: {MaxHealth}\n" +
             $"Текущее здоровье: {CurrentHealth}\n" +
             $"Броня: {ArmorPoints}\n" +
-            $"Урон: {CalculateDamage()}\n" +
+            $"Сила: {Strength}\n" +
             $"Состояние здоровья: {( IsAlive ? "Жив" : "Мертв" )}";
     }
 }

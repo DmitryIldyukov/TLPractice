@@ -16,6 +16,7 @@ public interface IFighter
     int ArmorPoints { get; }
     int MaxHealth { get; }
     bool IsAlive { get; }
+    int Strength { get; }
     int TakeDamage( int damage );
     int CalculateDamage();
     void Revive();

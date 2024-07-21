@@ -74,7 +74,7 @@ public class GameManager : IGameManager
             ShowFighterCountError( fighterCount );
             return;
         }
-        IFighter winner = null;
+
         Console.WriteLine( "Бой начинается!" );
         while ( fighters.Count( f => f.IsAlive ) > 1 )
         {
@@ -100,7 +100,7 @@ public class GameManager : IGameManager
             WaitForKeyPress();
         }
 
-        winner = fighters.FirstOrDefault( f => f.IsAlive );
+        IFighter winner = fighters.FirstOrDefault( f => f.IsAlive );
 
         Console.WriteLine( $"{winner.Name} победил!!!" );
     }
@@ -115,12 +115,10 @@ public class GameManager : IGameManager
             return;
         }
 
-        Console.WriteLine( message );
-        Console.WriteLine();
+        Console.WriteLine( message + "\n");
         foreach ( IFighter fighter in fighters )
         {
-            Console.WriteLine( fighter );
-            Console.WriteLine();
+            Console.WriteLine( fighter + "\n" );
         }
     }
 
@@ -134,8 +132,15 @@ public class GameManager : IGameManager
     {
         int damage = fighter.CalculateDamage();
         int damageTaken = opponent.TakeDamage( damage );
-        Console.WriteLine( $"{fighter.Name} атакует {opponent.Name} и наносит ему {damage} урона." );
-        Console.WriteLine( $"{opponent.Name} получает {damageTaken} урона и {( opponent.IsAlive ? "выживает" : "погибает" )}." );
+        Console.WriteLine( $"{fighter.Name} атакует {opponent.Name} с силой равной {damage}." );
+        if ( damageTaken < damage )
+        {
+            Console.WriteLine( $"{opponent.Name} частично блокирует атаку, получает {damageTaken} урона и {( opponent.IsAlive ? "выживает" : "погибает" )}." );
+        }
+        else
+        {
+            Console.WriteLine( $"{opponent.Name} получает {damageTaken} урона и {( opponent.IsAlive ? "выживает" : "погибает" )}." );
+        }
     }
 
     private void WaitForKeyPress()
