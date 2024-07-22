@@ -1,4 +1,6 @@
-﻿namespace CarFactory.Models.GearBox;
+﻿using CarFactory.Interfaces;
+
+namespace CarFactory.Models.GearBox;
 
 public class Manual : IGearBox
 {
@@ -7,9 +9,4 @@ public class Manual : IGearBox
     public int AdditionalSpeed => 20;
 
     public int GearCount => 3;
-
-    public override string ToString()
-    {
-        return Name;
-    }
 }

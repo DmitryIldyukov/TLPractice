@@ -1,12 +1,6 @@
 ﻿using CarFactory.Helpers;
+using CarFactory.Interfaces;
 using CarFactory.Models.Car;
-using CarFactory.Models.CarBrands;
-using CarFactory.Models.CarClasses;
-using CarFactory.Models.CarModels;
-using CarFactory.Models.Cars;
-using CarFactory.Models.Colors;
-using CarFactory.Models.Engine;
-using CarFactory.Models.GearBox;
 using CarFactory.Storage;
 
 namespace CarFactory.Services;
@@ -38,7 +32,7 @@ public class CarService : ICarService
 
     public IEnumerable<ICar> GetCars() => _carStorage.GetCars();
 
-    private T ChooseItem<T>( IEnumerable<T> items, string type ) where T : class
+    private T ChooseItem<T>( IEnumerable<T> items, string type ) where T : INamedInterface
     {
         List<T> itemList = items.ToList();
 

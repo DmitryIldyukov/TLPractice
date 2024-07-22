@@ -1,15 +1,10 @@
-﻿using CarFactory.Models.CarClasses;
-using CarFactory.Models.CarModels;
-using CarFactory.Models.Cars;
-using CarFactory.Models.Colors;
-using CarFactory.Models.Engine;
-using CarFactory.Models.GearBox;
+﻿using CarFactory.Interfaces;
 
 namespace CarFactory.Models.Car;
 
 public class Car : ICar
 {
-    public Car( 
+    public Car(
         ICarModel carModel, 
         ICarClass carClass, 
         IEngine engine, 
@@ -43,11 +38,11 @@ public class Car : ICar
 
     public override string ToString()
     {
-        string carInfo = $"------ {CarModel.CarBrand} {CarModel} ------\n" +
-                         $"Кузов: {CarClass}\n" +
-                         $"Цвет: {Color}\n" +
-                         $"Двигатель: {Engine} \n" +
-                         $"Коробка передач: {GearBox}\n" +
+        string carInfo = $"------ {CarModel.CarBrand.Name} {CarModel.Name} ------\n" +
+                         $"Кузов: {CarClass.Name}\n" +
+                         $"Цвет: {Color.Name}\n" +
+                         $"Двигатель: {Engine.Name} \n" +
+                         $"Коробка передач: {GearBox.Name}\n" +
                          $"Расположение руля: {( IsLeftSideWheel ? "Слева" : "Справа" )}\n" +
                          $"Максимальная скорость: {CalculateMaxSpeed()}\n" +
                          $"Количество передач: {GetNumberOfGears()}\n";

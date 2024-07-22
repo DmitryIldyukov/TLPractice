@@ -1,4 +1,6 @@
-﻿namespace CarFactory.Models.Engine;
+﻿using CarFactory.Interfaces;
+
+namespace CarFactory.Models.Engine;
 
 public class Diesel : IEngine
 {
@@ -7,9 +9,4 @@ public class Diesel : IEngine
     public int Horsepower => 190;
 
     public int GearCount => 4;
-
-    public override string ToString()
-    {
-        return Name;
-    }
 }

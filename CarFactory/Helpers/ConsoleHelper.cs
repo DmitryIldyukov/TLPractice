@@ -1,8 +1,10 @@
-﻿namespace CarFactory.Helpers;
+﻿using CarFactory.Interfaces;
+
+namespace CarFactory.Helpers;
 
 public static class ConsoleHelper
 {
-    public static T ChooseItemByIndex<T>( List<T> items ) where T : class
+    public static T ChooseItemByIndex<T>( List<T> items ) where T : INamedInterface
     {
         int index;
         DisplayOptions( items );
@@ -20,11 +22,11 @@ public static class ConsoleHelper
         return items[ index - 1 ];
     }
 
-    public static void DisplayOptions<T>( IList<T> items ) where T : class
+    public static void DisplayOptions<T>( IList<T> items ) where T : INamedInterface
     {
         for ( int i = 0; i < items.Count(); i++ )
         {
-            Console.WriteLine( $"{i + 1} - {items[ i ]}" );
+            Console.WriteLine( $"{i + 1} - {items[ i ].Name}" );
         }
 
         Console.Write( "Ввод: " );

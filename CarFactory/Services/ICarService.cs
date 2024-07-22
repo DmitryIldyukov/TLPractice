@@ -1,4 +1,4 @@
-﻿using CarFactory.Models.Cars;
+﻿using CarFactory.Interfaces;
 
 namespace CarFactory.Services;
 

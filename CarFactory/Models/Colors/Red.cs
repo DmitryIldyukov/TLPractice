@@ -1,11 +1,8 @@
-﻿namespace CarFactory.Models.Colors;
+﻿using CarFactory.Interfaces;
+
+namespace CarFactory.Models.Colors;
 
 public class Red : IColor
 {
     public string Name => "Красный";
-
-    public override string ToString()
-    {
-        return Name;
-    }
 }

@@ -1,4 +1,5 @@
-﻿using CarFactory.Models.CarBrands;
+﻿using CarFactory.Interfaces;
+using CarFactory.Models.CarBrands;
 
 namespace CarFactory.Models.CarModels;
 
@@ -11,9 +12,4 @@ public class Vesta : ICarModel
     public string Name => "Веста";
 
     public ICarBrand CarBrand { get; init; }
-
-    public override string ToString()
-    {
-        return Name;
-    }
 }

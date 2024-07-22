@@ -1,4 +1,6 @@
-﻿namespace CarFactory.Models.Engine;
+﻿using CarFactory.Interfaces;
+
+namespace CarFactory.Models.Engine;
 
 public class Petrol : IEngine
 {
@@ -7,9 +9,4 @@ public class Petrol : IEngine
     public int Horsepower => 220;
 
     public int GearCount => 2;
-
-    public override string ToString()
-    {
-        return Name;
-    }
 }
