@@ -9,7 +9,13 @@ namespace CarFactory.Models.Car;
 
 public class Car : ICar
 {
-    public Car( ICarModel carModel, ICarClass carClass, IEngine engine, IGearBox gearBox, IColor color, bool isLeftSideWheel )
+    public Car( 
+        ICarModel carModel, 
+        ICarClass carClass, 
+        IEngine engine, 
+        IGearBox gearBox, 
+        IColor color, 
+        bool isLeftSideWheel )
     {
         CarModel = carModel;
         CarClass = carClass;
@@ -45,6 +51,7 @@ public class Car : ICar
                          $"Расположение руля: {( IsLeftSideWheel ? "Слева" : "Справа" )}\n" +
                          $"Максимальная скорость: {CalculateMaxSpeed()}\n" +
                          $"Количество передач: {GetNumberOfGears()}\n";
+
         return carInfo;
     }
 }

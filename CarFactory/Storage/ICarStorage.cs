@@ -10,16 +10,11 @@ namespace CarFactory.Storage;
 
 public interface ICarStorage : ICarAdder
 {
-    ICarModel[] GetCarModels();
-    ICarBrand[] GetCarBrands();
-    IColor[] GetColors();
-    ICarClass[] GetCarClasses();
-    IEngine[] GetEngines();
-    IGearBox[] GetGearBoxes();
+    IEnumerable<ICarModel> GetCarModels();
+    IEnumerable<ICarBrand> GetCarBrands();
+    IEnumerable<IColor> GetColors();
+    IEnumerable<ICarClass> GetCarClasses();
+    IEnumerable<IEngine> GetEngines();
+    IEnumerable<IGearBox> GetGearBoxes();
     IEnumerable<ICar> GetCars();
-}
-
-public interface ICarAdder
-{
-    void AddCar( ICar car );
 }

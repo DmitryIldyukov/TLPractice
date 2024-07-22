@@ -20,12 +20,13 @@ public static class ConsoleHelper
         return items[ index - 1 ];
     }
 
-    public static void DisplayOptions<T>( List<T> items ) where T : class
+    public static void DisplayOptions<T>( IList<T> items ) where T : class
     {
         for ( int i = 0; i < items.Count(); i++ )
         {
             Console.WriteLine( $"{i + 1} - {items[ i ]}" );
         }
+
         Console.Write( "Ввод: " );
     }
 }

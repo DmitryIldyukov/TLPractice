@@ -23,14 +23,7 @@ public class CarFactoryHandler : ICarFactoryHandler
             switch ( input )
             {
                 case "1":
-                    try
-                    {
-                        CreateCar();
-                    }
-                    catch ( Exception e )
-                    {
-                        Console.WriteLine( $"Произошла ошибка. {e.Message}" );
-                    }
+                    CreateCar();
                     break;
                 case "2":
                     ShowCarsInformation();
@@ -60,8 +53,15 @@ public class CarFactoryHandler : ICarFactoryHandler
 
     private void CreateCar()
     {
-        ICar car = _carService.CreateCar();
-        Console.WriteLine( $"Автомобиль {car.CarModel.CarBrand.Name} {car.CarModel.Name} успешно создан!" );
+        try
+        {
+            ICar car = _carService.CreateCar();
+            Console.WriteLine( $"Автомобиль {car.CarModel.CarBrand.Name} {car.CarModel.Name} успешно создан!" );
+        }
+        catch ( Exception e )
+        {
+            Console.WriteLine( $"Произошла ошибка. {e.Message}" );
+        }
     }
 
     private void ShowCarsInformation()

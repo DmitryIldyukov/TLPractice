@@ -41,22 +41,28 @@ public class CarService : ICarService
     private T ChooseItem<T>( IEnumerable<T> items, string type ) where T : class
     {
         List<T> itemList = items.ToList();
+
         if ( itemList.Count == 0 )
         {
             throw new Exception( $"Нет доступных {type}" );
         }
+
         Console.WriteLine( $"Выберите из доступных {type}:" );
+
         return ConsoleHelper.ChooseItemByIndex( itemList );
     }
 
     private ICarModel ChooseCarModel( ICarBrand brand )
     {
         List<ICarModel> availableModels = _carStorage.GetCarModels().Where( m => m.CarBrand == brand ).ToList();
+
         if ( availableModels.Count() == 0 )
         {
             throw new Exception( "Нет доступных моделей авто." );
         }
+
         Console.WriteLine( "Выберите модель автомобиля:" );
+
         return ConsoleHelper.ChooseItemByIndex( availableModels );
     }
 
@@ -66,10 +72,12 @@ public class CarService : ICarService
         while ( true )
         {
             string side = Console.ReadLine().ToLower().Trim();
+
             if ( side == "r" || side == "l" )
             {
                 return side == "l";
             }
+
             Console.Write( "Неверный ввод. Введите 'l' для левой стороны или 'r' для правой: " );
         }
     }
