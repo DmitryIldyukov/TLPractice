@@ -1,14 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data;
 
 public class SpotlightDbContext : DbContext
 {
-    public SpotlightDbContext( DbContextOptions<SpotlightDbContext> options ) 
+    public SpotlightDbContext( DbContextOptions<SpotlightDbContext> options )
         : base( options )
     { }
 
     #region DbSets
+
+    public DbSet<Theater> Theaters { get; set; }
+    public DbSet<Play> Plays { get; set; }
+    public DbSet<Author> Authors { get; set; }
+    public DbSet<Composition> Compositions { get; set; }
 
     #endregion
 
@@ -16,6 +22,6 @@ public class SpotlightDbContext : DbContext
     {
         base.OnModelCreating( modelBuilder );
 
-
+        modelBuilder.ApplyConfigurationsFromAssembly( GetType().Assembly );
     }
 }

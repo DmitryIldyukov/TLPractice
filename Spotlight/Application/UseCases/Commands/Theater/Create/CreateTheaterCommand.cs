@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.UseCases.Commands.Theater;
-internal class TheaterCreateCommand
+namespace Application.UseCases.Commands.Theater.Create;
+internal class CreateTheaterCommand
 {
 }
