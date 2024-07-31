@@ -3,6 +3,7 @@ using Application.UseCases.Commands.Author.Delete;
 using Application.UseCases.Commands.Author.Update;
 using Application.UseCases.Queries.Author.Dtos;
 using Application.UseCases.Queries.Author.GetAll;
+using Application.UseCases.Queries.Author.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Dtos.Author;
@@ -54,6 +55,20 @@ public class AuthorController : ControllerBase
 
         return Ok( response );
     }
+
+    [HttpGet( "{authorId}" )]
+    public async Task<IActionResult> GetAuthorById( [FromRoute] int authorId )
+    {
+        GetAuthorByIdQuery query = new()
+        {
+            AuthorId = authorId
+        };
+
+        GetAuthorQueryDto author = await _mediator.Send( query );
+
+        return Ok( author );
+    }
+
 
     [HttpPut( "{authorId:int}" )]
     public async Task<IActionResult> UpdateAuthor( [FromRoute] int authorId, [FromBody] AuthorUpdateDto dto )

@@ -21,10 +21,13 @@ public class WorkingHoursRepository : IWorkingHoursRepository
 
     public async Task<IEnumerable<WorkingHours>> GetTheaterWorkingHours( int theaterId )
     {
-        return await _context.WorkingHours.Where( wh => wh.TheaterId == theaterId ).ToListAsync();
+        return await _context.WorkingHours
+            .Where( wh => wh.TheaterId == theaterId )
+            .OrderBy( wh => wh.DayOfWeek )
+            .ToListAsync();
     }
 
-    public async Task DeleteWorkingHours(int workingHoursId)
+    public async Task DeleteWorkingHours( int workingHoursId )
     {
         WorkingHours workingHours = await GetById( workingHoursId );
         if ( workingHours is not null )
@@ -40,10 +43,10 @@ public class WorkingHoursRepository : IWorkingHoursRepository
             .FirstOrDefaultAsync( wh => wh.WorkingHoursId == id );
     }
 
-    public async Task<WorkingHours> GetOnDayOfWeek(int theaterId, DayOfWeek dayOfWeek)
+    public async Task<WorkingHours> GetOnDayOfWeek( int theaterId, DayOfWeek dayOfWeek )
     {
         return await _context.WorkingHours
             .Include( t => t.Theater )
-            .FirstOrDefaultAsync(wh => wh.TheaterId == theaterId && wh.DayOfWeek == dayOfWeek);
+            .FirstOrDefaultAsync( wh => wh.TheaterId == theaterId && wh.DayOfWeek == dayOfWeek );
     }
 }

@@ -1,11 +1,12 @@
 ﻿using Application.UseCases.Commands.WorkingHours.Create;
 using Application.UseCases.Queries.WorkingHours.Dtos;
 using Application.UseCases.Queries.WorkingHours.GetWorkingHoursByTheaterId;
+using Application.UseCases.Queries.WorkingHours.GetWorkingHoursOnDayOfWeek;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Dtos.WorkingHoures;
 
-namespace WebAPI.Controllers; 
+namespace WebAPI.Controllers;
 
 [ApiController]
 [Route( "api/[controller]" )]
@@ -23,7 +24,7 @@ public class WorkingHoursController : ControllerBase
     [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
     public async Task<IActionResult> AddWorkingHours( [FromRoute] int theaterId, [FromBody] WorkingHoursDto dto )
     {
-        CreateWorkingHoursCommand command = new CreateWorkingHoursCommand()
+        CreateWorkingHoursCommand command = new()
         {
             TheaterId = theaterId,
             DayOfWeek = dto.DayOfWeek,
@@ -48,7 +49,7 @@ public class WorkingHoursController : ControllerBase
     [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
     public async Task<IActionResult> GetTheaterWorkingHourse( [FromRoute] int theaterId )
     {
-        GetWorkingHoursByTheaterIdQuery query = new GetWorkingHoursByTheaterIdQuery()
+        GetWorkingHoursByTheaterIdQuery query = new()
         {
             TheaterId = theaterId
         };
@@ -56,6 +57,27 @@ public class WorkingHoursController : ControllerBase
         try
         {
             IReadOnlyList<GetWorkingHoursDto> workingHours = await _mediator.Send( query );
+
+            return Ok( workingHours );
+        }
+        catch ( ArgumentException e )
+        {
+            return BadRequest( e.Message );
+        }
+    }
+
+    [HttpGet( "[action]/{theaterId}/{dayOfWeek}" )]
+    public async Task<IActionResult> GetTheaterWorkingHoursOnDayOfWeek( [FromRoute] int theaterId, [FromRoute] DayOfWeek dayOfWeek )
+    {
+        GetWorkingHoursOnDayOfWeekQuery query = new()
+        {
+            TheaterId = theaterId,
+            DayOfWeek = dayOfWeek
+        };
+
+        try
+        {
+            GetWorkingHoursDto workingHours = await _mediator.Send( query );
 
             return Ok( workingHours );
         }
