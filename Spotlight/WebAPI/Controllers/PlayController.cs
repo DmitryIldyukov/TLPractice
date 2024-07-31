@@ -19,7 +19,7 @@ public class PlayController : ControllerBase
     }
 
     [HttpPost( "[action]" )]
-    [ProducesResponseType( StatusCodes.Status200OK )]
+    [ProducesResponseType( typeof( int ), StatusCodes.Status200OK )]
     [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
     public async Task<IActionResult> CreatePlay( [FromBody] PlayDto dto )
     {
@@ -36,9 +36,9 @@ public class PlayController : ControllerBase
 
         try
         {
-            await _mediator.Send( command );
+            int playId = await _mediator.Send( command );
 
-            return Ok();
+            return Ok( playId );
         }
         catch ( ArgumentException e )
         {

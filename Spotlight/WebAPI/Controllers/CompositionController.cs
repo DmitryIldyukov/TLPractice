@@ -17,7 +17,7 @@ public class CompositionController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType( StatusCodes.Status200OK )]
+    [ProducesResponseType( typeof( int ), StatusCodes.Status200OK )]
     [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
     public async Task<IActionResult> CreateComposition( [FromBody] CompositionDto dto )
     {
@@ -31,9 +31,9 @@ public class CompositionController : ControllerBase
 
         try
         {
-            await _mediator.Send( command );
+            int compositionId = await _mediator.Send( command );
 
-            return Ok();
+            return Ok( compositionId );
         }
         catch ( ArgumentException e )
         {

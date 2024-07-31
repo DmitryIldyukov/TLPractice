@@ -1,8 +1,8 @@
-﻿using MediatR;
+﻿using Application.Common.CQRS.Command;
 
 namespace Application.UseCases.Commands.WorkingHours.Create;
 
-public class CreateWorkingHoursCommand : IRequest
+public class CreateWorkingHoursCommand : ICommand<int>
 {
     public int TheaterId { get; init; }
     public DayOfWeek DayOfWeek { get; init; }

@@ -1,10 +1,11 @@
-﻿using Application.Interfaces;
+﻿using Application.Common.CQRS.Command;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using MediatR;
 
 namespace Application.UseCases.Commands.Theater.Update;
 
-public class UpdateTheaterCommandHandler : IRequestHandler<UpdateTheaterCommand>
+public class UpdateTheaterCommandHandler : ICommandHandler<UpdateTheaterCommand, Unit>
 {
     private readonly ITheaterRepository _theaterRepository;
     private readonly IUnitOfWork _unitOfWork;

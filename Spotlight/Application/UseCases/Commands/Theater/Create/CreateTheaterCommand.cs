@@ -1,8 +1,8 @@
-﻿using MediatR;
+﻿using Application.Common.CQRS.Command;
 
 namespace Application.UseCases.Commands.Theater.Create;
 
-public class CreateTheaterCommand : IRequest
+public class CreateTheaterCommand : ICommand<int>
 {
     public string Name { get; init; }
     public string Address { get; init; }

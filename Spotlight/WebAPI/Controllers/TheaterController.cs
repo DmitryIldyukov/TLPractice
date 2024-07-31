@@ -16,15 +16,15 @@ public class TheaterController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public TheaterController(IMediator mediator)
+    public TheaterController( IMediator mediator )
     {
         _mediator = mediator;
     }
 
     [HttpPost]
-    [ProducesResponseType( StatusCodes.Status200OK )]
+    [ProducesResponseType( typeof( int ), StatusCodes.Status200OK )]
     [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
-    public async Task<IActionResult> CreateTheater( [FromBody] TheaterDto dto )
+    public async Task<IActionResult> CreateTheater( [FromBody] TheaterDto dto, CancellationToken cancellationToken )
     {
         CreateTheaterCommand command = new()
         {
@@ -37,9 +37,9 @@ public class TheaterController : ControllerBase
 
         try
         {
-            await _mediator.Send( command );
+            int theaterId = await _mediator.Send( command );
 
-            return Ok();
+            return Created( nameof( CreateTheater ), theaterId );
         }
         catch ( ArgumentException e )
         {
@@ -48,13 +48,13 @@ public class TheaterController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType( typeof( IReadOnlyList<GetAllTheaterDto> ), StatusCodes.Status200OK )]
+    [ProducesResponseType( typeof( IReadOnlyList<GetTheaterDto> ), StatusCodes.Status200OK )]
     [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
     public async Task<IActionResult> GetAllTheaters()
     {
         GetAllTheaterQuery query = new();
 
-        IReadOnlyList<GetAllTheaterDto> theaters = await _mediator.Send( query );
+        IReadOnlyList<GetTheaterDto> theaters = await _mediator.Send( query );
 
         return Ok( theaters );
     }
@@ -97,6 +97,7 @@ public class TheaterController : ControllerBase
         try
         {
             await _mediator.Send( command );
+
             return Ok();
         }
         catch ( ArgumentException e )

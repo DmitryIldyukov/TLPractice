@@ -1,23 +1,26 @@
-﻿using Application.Interfaces;
+﻿using Application.Common.CQRS.Command;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
-using MediatR;
 
 namespace Application.UseCases.Commands.WorkingHours.Create;
 
-public class CreateWorkingHoursCommandHandler : IRequestHandler<CreateWorkingHoursCommand>
+public class CreateWorkingHoursCommandHandler : ICommandHandler<CreateWorkingHoursCommand, int>
 {
     private readonly IWorkingHoursRepository _workingHoursRepository;
     private readonly ITheaterRepository _theaterRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public CreateWorkingHoursCommandHandler( IWorkingHoursRepository workingHoursRepository, ITheaterRepository theaterRepository, IUnitOfWork unitOfWork )
+    public CreateWorkingHoursCommandHandler( 
+        IWorkingHoursRepository workingHoursRepository, 
+        ITheaterRepository theaterRepository, 
+        IUnitOfWork unitOfWork )
     {
         _workingHoursRepository = workingHoursRepository;
         _theaterRepository = theaterRepository;
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Unit> Handle( CreateWorkingHoursCommand command, CancellationToken cancellationToken )
+    public async Task<int> Handle( CreateWorkingHoursCommand command, CancellationToken cancellationToken )
     {
         if ( command.OpeningTime >= command.ClosingTime )
         {
@@ -29,17 +32,17 @@ public class CreateWorkingHoursCommandHandler : IRequestHandler<CreateWorkingHou
             throw new ArgumentException( "Театр не найден." );
         }
 
-        if ( await _workingHoursRepository.GetOnDayOfWeek(command.TheaterId, command.DayOfWeek) is not null)
+        if ( await _workingHoursRepository.GetOnDayOfWeek( command.TheaterId, command.DayOfWeek ) is not null )
         {
             throw new ArgumentException( "У театра на этот день недели уже настроено расписание." );
         }
 
         Domain.Entities.WorkingHours workingHours = new( command.DayOfWeek, command.OpeningTime, command.ClosingTime, command.TheaterId );
 
-        await _workingHoursRepository.CreateWorkingHours(workingHours);
+        await _workingHoursRepository.CreateWorkingHours( workingHours );
 
         await _unitOfWork.SaveChangesAsync( cancellationToken );
 
-        return Unit.Value;
+        return workingHours.WorkingHoursId;
     }
 }

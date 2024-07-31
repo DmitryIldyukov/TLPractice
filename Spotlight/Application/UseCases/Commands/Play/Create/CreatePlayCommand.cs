@@ -1,8 +1,8 @@
-﻿using MediatR;
+﻿using Application.Common.CQRS.Command;
 
 namespace Application.UseCases.Commands.Play.Create;
 
-public class CreatePlayCommand : IRequest
+public class CreatePlayCommand : ICommand<int>
 {
     public string Name { get; set; }
     public DateTime StartDate { get; set; }

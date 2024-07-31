@@ -1,11 +1,11 @@
-﻿using Application.Interfaces;
+﻿using Application.Common.CQRS.Query;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.UseCases.Queries.Theater.Dtos;
-using MediatR;
 
 namespace Application.UseCases.Queries.Theater.GetAll;
 
-public class GetAllTheaterQueryHandler : IRequestHandler<GetAllTheaterQuery, IReadOnlyList<GetAllTheaterDto>>
+public class GetAllTheaterQueryHandler : IQueryHandler<GetAllTheaterQuery, IReadOnlyList<GetTheaterDto>>
 {
     private readonly ITheaterRepository _theaterRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -16,11 +16,11 @@ public class GetAllTheaterQueryHandler : IRequestHandler<GetAllTheaterQuery, IRe
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<IReadOnlyList<GetAllTheaterDto>> Handle( GetAllTheaterQuery request, CancellationToken cancellationToken )
+    public async Task<IReadOnlyList<GetTheaterDto>> Handle( GetAllTheaterQuery request, CancellationToken cancellationToken )
     {
         IEnumerable<Domain.Entities.Theater> theaters = await _theaterRepository.GetAll();
 
-        IReadOnlyList<GetAllTheaterDto> response = theaters.Select( t => new GetAllTheaterDto()
+        IReadOnlyList<GetTheaterDto> response = theaters.Select( t => new GetTheaterDto()
         {
             TheaterId = t.TheaterId,
             Name = t.Name,

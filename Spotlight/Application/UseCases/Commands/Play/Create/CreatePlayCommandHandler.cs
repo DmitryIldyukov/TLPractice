@@ -1,10 +1,10 @@
-﻿using Application.Interfaces;
+﻿using Application.Common.CQRS.Command;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
-using MediatR;
 
 namespace Application.UseCases.Commands.Play.Create;
 
-public class CreatePlayCommandHandler : IRequestHandler<CreatePlayCommand>
+public class CreatePlayCommandHandler : ICommandHandler<CreatePlayCommand, int>
 {
     private readonly IPlayRepository _playRepository;
     private readonly ITheaterRepository _theaterRepository;
@@ -23,7 +23,7 @@ public class CreatePlayCommandHandler : IRequestHandler<CreatePlayCommand>
         _compositionRepository = compositionRepository;
     }
 
-    public async Task<Unit> Handle( CreatePlayCommand command, CancellationToken cancellationToken )
+    public async Task<int> Handle( CreatePlayCommand command, CancellationToken cancellationToken )
     {
         if ( string.IsNullOrEmpty( command.Name ) )
         {
@@ -69,6 +69,6 @@ public class CreatePlayCommandHandler : IRequestHandler<CreatePlayCommand>
 
         await _unitOfWork.SaveChangesAsync();
 
-        return Unit.Value;
+        return play.PlayId;
     }
 }

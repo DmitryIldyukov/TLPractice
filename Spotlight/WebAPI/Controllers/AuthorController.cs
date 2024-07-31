@@ -22,7 +22,7 @@ public class AuthorController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType( StatusCodes.Status200OK )]
+    [ProducesResponseType( typeof( int ), StatusCodes.Status200OK )]
     [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
     public async Task<IActionResult> CreateAuthor( [FromBody] AuthorDto dto )
     {
@@ -34,9 +34,9 @@ public class AuthorController : ControllerBase
 
         try
         {
-            await _mediator.Send( command );
+            int authorId = await _mediator.Send( command );
 
-            return Ok();
+            return Ok( authorId );
         }
         catch ( ArgumentException e )
         {

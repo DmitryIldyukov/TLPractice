@@ -1,10 +1,11 @@
-﻿using Application.Interfaces;
+﻿using Application.Common.CQRS.Command;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using MediatR;
 
 namespace Application.UseCases.Commands.Author.Update;
 
-public class UpdateAuthorCommandHandler : IRequestHandler<UpdateAuthorCommand>
+public class UpdateAuthorCommandHandler : ICommandHandler<UpdateAuthorCommand, Unit>
 {
     private readonly IAuthorRepository _authorRepository;
     private readonly IUnitOfWork _unitOfWork;

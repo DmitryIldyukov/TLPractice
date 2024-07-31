@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using Application.Common.CQRS.Command;
+using MediatR;
 
 namespace Application.UseCases.Commands.Theater.Update;
 
-public class UpdateTheaterCommand : IRequest
+public class UpdateTheaterCommand : ICommand<Unit>
 {
     public int TheaterId { get; init; }
     public string Name { get; init; }

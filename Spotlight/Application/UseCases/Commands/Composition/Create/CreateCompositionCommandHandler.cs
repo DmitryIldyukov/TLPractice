@@ -1,14 +1,15 @@
-﻿using Application.Interfaces;
+﻿using Application.Common.CQRS.Command;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
-using MediatR;
 
 namespace Application.UseCases.Commands.Composition.Create;
 
-public class CreateCompositionCommandHandler : IRequestHandler<CreateCompositionCommand>
+public class CreateCompositionCommandHandler : ICommandHandler<CreateCompositionCommand, int>
 {
     private readonly ICompositionRepository _compositionRepository;
     private readonly IAuthorRepository _authorRepository;
     private readonly IUnitOfWork _unitOfWork;
+
     public CreateCompositionCommandHandler( ICompositionRepository compositionRepository, IAuthorRepository authorRepository, IUnitOfWork unitOfWork )
     {
         _compositionRepository = compositionRepository;
@@ -16,7 +17,7 @@ public class CreateCompositionCommandHandler : IRequestHandler<CreateComposition
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Unit> Handle( CreateCompositionCommand request, CancellationToken cancellationToken )
+    public async Task<int> Handle( CreateCompositionCommand request, CancellationToken cancellationToken )
     {
         if ( string.IsNullOrEmpty( request.Name ) )
         {
@@ -44,6 +45,6 @@ public class CreateCompositionCommandHandler : IRequestHandler<CreateComposition
 
         await _unitOfWork.SaveChangesAsync( cancellationToken );
 
-        return Unit.Value;
+        return composition.CompositionId;
     }
 }

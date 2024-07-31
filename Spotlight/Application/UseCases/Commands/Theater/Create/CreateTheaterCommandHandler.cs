@@ -1,10 +1,10 @@
-﻿using Application.Interfaces;
+﻿using Application.Common.CQRS.Command;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
-using MediatR;
 
 namespace Application.UseCases.Commands.Theater.Create;
 
-public class CreateTheaterCommandHandler : IRequestHandler<CreateTheaterCommand>
+public class CreateTheaterCommandHandler : ICommandHandler<CreateTheaterCommand, int>
 {
     private readonly ITheaterRepository _theaterRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -15,7 +15,7 @@ public class CreateTheaterCommandHandler : IRequestHandler<CreateTheaterCommand>
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Unit> Handle( CreateTheaterCommand command, CancellationToken cancellationToken )
+    public async Task<int> Handle( CreateTheaterCommand command, CancellationToken cancellationToken )
     {
         if ( string.IsNullOrEmpty( command.Name ) )
         {
@@ -49,6 +49,6 @@ public class CreateTheaterCommandHandler : IRequestHandler<CreateTheaterCommand>
 
         await _unitOfWork.SaveChangesAsync( cancellationToken );
 
-        return Unit.Value;
+        return theater.TheaterId;
     }
 }

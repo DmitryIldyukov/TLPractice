@@ -1,10 +1,10 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.Common.CQRS.Query;
+using Application.Interfaces.Repositories;
 using Application.UseCases.Queries.Author.Dtos;
-using MediatR;
 
 namespace Application.UseCases.Queries.Author.GetAll;
 
-public class GetAllAuthorQueryHandler : IRequestHandler<GetAllAuthorQuery, IReadOnlyList<GetAuthorQueryDto>>
+public class GetAllAuthorQueryHandler : IQueryHandler<GetAllAuthorQuery, IReadOnlyList<GetAuthorQueryDto>>
 {
     private readonly IAuthorRepository _authorRepository;
 

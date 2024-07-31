@@ -1,10 +1,10 @@
-﻿using Application.Interfaces;
+﻿using Application.Common.CQRS.Command;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
-using MediatR;
 
 namespace Application.UseCases.Commands.Author.Create;
 
-public class CreateAuthorCommandHandler : IRequestHandler<CreateAuthorCommand>
+public class CreateAuthorCommandHandler : ICommandHandler<CreateAuthorCommand, int>
 {
     private readonly IAuthorRepository _authorRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -15,7 +15,7 @@ public class CreateAuthorCommandHandler : IRequestHandler<CreateAuthorCommand>
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Unit> Handle( CreateAuthorCommand command, CancellationToken cancellationToken )
+    public async Task<int> Handle( CreateAuthorCommand command, CancellationToken cancellationToken )
     {
         if ( string.IsNullOrEmpty( command.Name ) )
         {
@@ -28,13 +28,12 @@ public class CreateAuthorCommandHandler : IRequestHandler<CreateAuthorCommand>
         {
             throw new ArgumentException( "Минимальный возраст автора 5 лет." );
         }
-
         Domain.Entities.Author author = new Domain.Entities.Author( command.Name, command.Birthday );
 
         await _authorRepository.Create( author );
 
         await _unitOfWork.SaveChangesAsync( cancellationToken );
 
-        return Unit.Value;
+        return author.AuthorId;
     }
 }

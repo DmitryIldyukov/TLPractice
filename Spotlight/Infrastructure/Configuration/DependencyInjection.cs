@@ -14,6 +14,7 @@ public static class DependencyInjection
         services.AddScoped<ITheaterRepository, TheaterRepository>();
         services.AddScoped<IPlayRepository, PlayRepository>();
         services.AddScoped<ICompositionRepository, CompositionRepository>();
+        services.AddScoped<IWorkingHoursRepository, WorkingHoursRepository>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 

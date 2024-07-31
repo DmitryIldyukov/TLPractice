@@ -1,10 +1,10 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.Common.CQRS.Query;
+using Application.Interfaces.Repositories;
 using Application.UseCases.Queries.WorkingHours.Dtos;
-using MediatR;
 
 namespace Application.UseCases.Queries.WorkingHours.GetWorkingHoursByTheaterId;
 
-public class GetWorkingHoursByTheaterIdQueryHandler : IRequestHandler<GetWorkingHoursByTheaterIdQuery, IReadOnlyList<GetWorkingHoursDto>>
+public class GetWorkingHoursByTheaterIdQueryHandler : IQueryHandler<GetWorkingHoursByTheaterIdQuery, IReadOnlyList<GetWorkingHoursDto>>
 {
     private readonly IWorkingHoursRepository _workingHoursRepository;
     private readonly ITheaterRepository _theaterRepository;

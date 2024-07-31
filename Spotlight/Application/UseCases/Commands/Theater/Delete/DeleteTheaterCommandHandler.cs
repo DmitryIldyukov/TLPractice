@@ -1,10 +1,11 @@
-﻿using Application.Interfaces;
+﻿using Application.Common.CQRS.Command;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using MediatR;
 
 namespace Application.UseCases.Commands.Theater.Delete;
 
-public class DeleteTheaterCommandHandler : IRequestHandler<DeleteTheaterCommand>
+public class DeleteTheaterCommandHandler : ICommandHandler<DeleteTheaterCommand, Unit>
 {
     private readonly ITheaterRepository _theaterRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -19,7 +20,7 @@ public class DeleteTheaterCommandHandler : IRequestHandler<DeleteTheaterCommand>
     {
         await _theaterRepository.Delete( command.TheaterId );
 
-        await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync( cancellationToken );
 
         return Unit.Value;
     }

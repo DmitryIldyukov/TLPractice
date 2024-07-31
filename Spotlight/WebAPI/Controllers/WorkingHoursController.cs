@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Dtos.WorkingHoures;
 
-namespace WebAPI.Controllers;
+namespace WebAPI.Controllers; 
 
 [ApiController]
 [Route( "api/[controller]" )]
@@ -19,7 +19,7 @@ public class WorkingHoursController : ControllerBase
     }
 
     [HttpPost( "{theaterId:int}" )]
-    [ProducesResponseType( StatusCodes.Status200OK )]
+    [ProducesResponseType( typeof( int ), StatusCodes.Status200OK )]
     [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
     public async Task<IActionResult> AddWorkingHours( [FromRoute] int theaterId, [FromBody] WorkingHoursDto dto )
     {
@@ -33,9 +33,9 @@ public class WorkingHoursController : ControllerBase
 
         try
         {
-            await _mediator.Send( command );
+            int workingHoursId = await _mediator.Send( command );
 
-            return Ok();
+            return Ok( workingHoursId );
         }
         catch ( ArgumentException e )
         {

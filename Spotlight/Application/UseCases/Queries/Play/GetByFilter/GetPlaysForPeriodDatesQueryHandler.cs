@@ -1,10 +1,10 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.Common.CQRS.Query;
+using Application.Interfaces.Repositories;
 using Application.UseCases.Queries.Play.Dtos;
-using MediatR;
 
 namespace Application.UseCases.Queries.Play.GetByFilter;
 
-public class GetPlaysForPeriodDatesQueryHandler : IRequestHandler<GetPlaysForPeriodDatesQuery, IReadOnlyList<GetPlayDto>>
+public class GetPlaysForPeriodDatesQueryHandler : IQueryHandler<GetPlaysForPeriodDatesQuery, IReadOnlyList<GetPlayDto>>
 {
     private readonly IPlayRepository _playRepository;
 

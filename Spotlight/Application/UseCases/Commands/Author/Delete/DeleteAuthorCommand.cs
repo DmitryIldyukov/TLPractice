@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using Application.Common.CQRS.Command;
+using MediatR;
 
 namespace Application.UseCases.Commands.Author.Delete;
 
-public class DeleteAuthorCommand : IRequest
+public class DeleteAuthorCommand : ICommand<Unit>
 {
     public int AuthorId { get; init; }
 }

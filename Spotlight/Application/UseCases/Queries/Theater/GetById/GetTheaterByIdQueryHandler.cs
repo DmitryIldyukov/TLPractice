@@ -1,11 +1,11 @@
-﻿using Application.Interfaces;
+﻿using Application.Common.CQRS.Query;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.UseCases.Queries.Theater.Dtos;
-using MediatR;
 
 namespace Application.UseCases.Queries.Theater.GetById;
 
-public class GetTheaterByIdQueryHandler : IRequestHandler<GetTheaterByIdQuery, GetTheaterDto>
+public class GetTheaterByIdQueryHandler : IQueryHandler<GetTheaterByIdQuery, GetTheaterDto>
 {
     private readonly ITheaterRepository _theaterRepository;
     private readonly IUnitOfWork _unitOfWork;
