@@ -12,14 +12,20 @@ public class AuthorConfiguration : IEntityTypeConfiguration<Author>
             .HasKey( c => c.AuthorId );
 
         builder.Property( c => c.AuthorId )
+            .HasComment( "Id автора" )
+            .HasColumnName( "author_id" )
             .ValueGeneratedOnAdd()
             .IsRequired();
 
         builder.Property( c => c.Name )
+            .HasComment( "ФИО автора" )
+            .HasColumnName( "name" )
             .HasMaxLength( 120 )
             .IsRequired();
 
         builder.Property( c => c.Birthday )
+            .HasComment( "Дата рождения" )
+            .HasColumnName( "birthday" )
             .IsRequired();
 
         builder.HasMany( c => c.Compositions )

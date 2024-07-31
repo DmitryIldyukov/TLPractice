@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
 
 namespace Application.UseCases.Commands.Theater.Create;
-internal class CreateTheaterCommand
+
+public class CreateTheaterCommand : IRequest
 {
+    public string Name { get; init; }
+    public string Address { get; init; }
+    public DateTime FirstOpeningDate { get; init; }
+    public string Description { get; init; }
+    public string PhoneNumber { get; init; }
 }

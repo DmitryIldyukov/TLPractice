@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(SpotlightDbContext))]
-    [Migration("20240723195050_InitialMigration")]
+    [Migration("20240730191732_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -29,17 +29,23 @@ namespace Infrastructure.Data.Migrations
                 {
                     b.Property<int>("AuthorId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("author_id")
+                        .HasComment("Id автора");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuthorId"));
 
-                    b.Property<DateOnly>("Birthday")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("Birthday")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("birthday")
+                        .HasComment("Дата рождения");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(120)
-                        .HasColumnType("nvarchar(120)");
+                        .HasColumnType("nvarchar(120)")
+                        .HasColumnName("name")
+                        .HasComment("ФИО автора");
 
                     b.HasKey("AuthorId");
 
@@ -50,60 +56,90 @@ namespace Infrastructure.Data.Migrations
                 {
                     b.Property<int>("CompositionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("composition_id")
+                        .HasComment("Id композиции");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompositionId"));
 
                     b.Property<int>("AuthorId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("author_id")
+                        .HasComment("Id автора");
 
                     b.Property<string>("HeroesInformation")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("heroes_information")
+                        .HasComment("Информация о героях произведения");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(120)
-                        .HasColumnType("nvarchar(120)");
+                        .HasColumnType("nvarchar(120)")
+                        .HasColumnName("name")
+                        .HasComment("Название композиции");
+
+                    b.Property<string>("ShortDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("short_description")
+                        .HasComment("Краткое описание");
 
                     b.HasKey("CompositionId");
 
                     b.HasIndex("AuthorId");
 
-                    b.ToTable("configurations", (string)null);
+                    b.ToTable("compositions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Play", b =>
                 {
                     b.Property<int>("PlayId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("play_id")
+                        .HasComment("Id представления");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlayId"));
 
                     b.Property<int>("CompositionId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("composition_id")
+                        .HasComment("Id композиции");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("description")
+                        .HasComment("Описание");
 
                     b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("end_date")
+                        .HasComment("Дата завершения");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(150)")
+                        .HasColumnName("name")
+                        .HasComment("Название");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("start_date")
+                        .HasComment("Дата начала");
 
                     b.Property<int>("TheaterId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("theater_id")
+                        .HasComment("Id театра");
 
                     b.Property<decimal>("TicketPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("ticket_price")
+                        .HasComment("Стоимость билета");
 
                     b.HasKey("PlayId");
 
@@ -118,26 +154,43 @@ namespace Infrastructure.Data.Migrations
                 {
                     b.Property<int>("TheaterId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("theater_id")
+                        .HasComment("Id театра");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TheaterId"));
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("address")
+                        .HasComment("Адрес");
+
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("description")
+                        .HasComment("Описание");
 
                     b.Property<DateTime>("FirstOpeningDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("first_opening_date")
+                        .HasComment("Дата первого открытия");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(150)")
+                        .HasColumnName("name")
+                        .HasComment("Название");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("phone_number")
+                        .HasComment("Номер для связи");
 
                     b.HasKey("TheaterId");
 

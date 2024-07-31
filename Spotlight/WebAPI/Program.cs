@@ -1,4 +1,5 @@
 using Application.Configuration;
+using Infrastructure.Configuration;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +11,10 @@ builder.Services.AddDbContext<SpotlightDbContext>( options =>
     options.UseSqlServer( connectionString );
 } );
 
-builder.Services.AddApplication();
+builder.Services
+    .AddApplication()
+    .AddInfrastructure();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

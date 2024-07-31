@@ -3,23 +3,24 @@
 public class Theater
 {
     public int TheaterId { get; init; }
-    public string Name { get; private set; }
+    public string Name { get; set; }
+    public string Address { get; init; }
     public DateTime FirstOpeningDate { get; init; }
-    // TODO: Режим работы
-    public string Description { get; private set; }
-    public string PhoneNumber { get; private set; }
+    public string Description { get; set; }
+    public string PhoneNumber { get; set; }
 
     public ICollection<Play> Plays { get; set; } = new HashSet<Play>();
+    public ICollection<WorkingHours> WorkingHours { get; set; } = new HashSet<WorkingHours>();
 
-    public Theater( 
-        int theaterId, 
-        string name, 
+    public Theater(
+        string name,
+        string address,
         DateTime firstOpeningDate, 
         string description, 
         string phoneNumber )
     {
-        TheaterId = theaterId;
         Name = name;
+        Address = address;
         FirstOpeningDate = firstOpeningDate;
         Description = description;
         PhoneNumber = phoneNumber;

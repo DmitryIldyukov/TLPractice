@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.UseCases.Queries.Theater.Dtos;
+using MediatR;
 
 namespace Application.UseCases.Queries.Theater.GetAll;
-internal class GetAlltheaterQuery
-{
-}
+
+public class GetAllTheaterQuery : IRequest<IReadOnlyList<GetAllTheaterDto>> { }
