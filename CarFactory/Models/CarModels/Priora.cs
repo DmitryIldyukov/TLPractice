@@ -1,5 +1,4 @@
-﻿using CarFactory.Interfaces;
-using CarFactory.Models.CarBrands;
+﻿using CarFactory.Models.CarBrands;
 
 namespace CarFactory.Models.CarModels;
 

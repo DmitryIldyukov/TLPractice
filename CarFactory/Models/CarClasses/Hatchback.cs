@@ -1,6 +1,4 @@
-﻿using CarFactory.Interfaces;
-
-namespace CarFactory.Models.CarClasses;
+﻿namespace CarFactory.Models.CarClasses;
 
 public class Hatchback : ICarClass
 {

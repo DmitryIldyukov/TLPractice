@@ -1,6 +1,4 @@
-﻿using CarFactory.Interfaces;
-
-namespace CarFactory.Models.Engine;
+﻿namespace CarFactory.Models.Engine;
 
 public class Diesel : IEngine
 {

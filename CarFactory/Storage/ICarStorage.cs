@@ -1,4 +1,10 @@
-﻿using CarFactory.Interfaces;
+﻿using CarFactory.Models.Car;
+using CarFactory.Models.CarBrands;
+using CarFactory.Models.CarClasses;
+using CarFactory.Models.CarModels;
+using CarFactory.Models.Colors;
+using CarFactory.Models.Engine;
+using CarFactory.Models.GearBox;
 
 namespace CarFactory.Storage;
 

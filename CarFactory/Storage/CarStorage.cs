@@ -1,4 +1,4 @@
-﻿using CarFactory.Interfaces;
+﻿using CarFactory.Models.Car;
 using CarFactory.Models.CarBrands;
 using CarFactory.Models.CarClasses;
 using CarFactory.Models.CarModels;

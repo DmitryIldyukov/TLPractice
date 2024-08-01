@@ -1,6 +1,4 @@
-﻿using CarFactory.Interfaces;
-
-namespace CarFactory.Models.GearBox;
+﻿namespace CarFactory.Models.GearBox;
 
 public class Automatic : IGearBox
 {

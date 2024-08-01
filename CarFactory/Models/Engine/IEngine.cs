@@ -1,4 +1,6 @@
-﻿namespace CarFactory.Interfaces;
+﻿using CarFactory.Interfaces;
+
+namespace CarFactory.Models.Engine;
 
 public interface IEngine : INamedInterface
 {

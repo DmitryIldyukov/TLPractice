@@ -1,6 +1,4 @@
-﻿using CarFactory.Interfaces;
-
-namespace CarFactory.Models.Colors;
+﻿namespace CarFactory.Models.Colors;
 
 public class Blue : IColor
 {

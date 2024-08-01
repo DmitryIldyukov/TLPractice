@@ -1,4 +1,6 @@
-﻿namespace CarFactory.Interfaces;
+﻿using CarFactory.Interfaces;
+
+namespace CarFactory.Models.GearBox;
 
 public interface IGearBox : INamedInterface
 {
