@@ -3,6 +3,7 @@
 public class GetPlayDto
 {
     public int PlayId { get; init; }
+    public string Name { get; init; }
     public DateTime StartDate { get; init; }
     public DateTime EndDate { get; init; }
     public decimal TicketPrice { get; init; }

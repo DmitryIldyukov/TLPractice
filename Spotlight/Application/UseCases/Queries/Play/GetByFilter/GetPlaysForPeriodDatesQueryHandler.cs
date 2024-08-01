@@ -25,6 +25,7 @@ public class GetPlaysForPeriodDatesQueryHandler : IQueryHandler<GetPlaysForPerio
         IReadOnlyList<GetPlayDto> response = plays.Select( p => new GetPlayDto()
         {
             PlayId = p.PlayId,
+            Name = p.Name,
             StartDate = p.StartDate,
             EndDate = p.EndDate,
             TicketPrice = p.TicketPrice,
