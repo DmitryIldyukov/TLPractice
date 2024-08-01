@@ -21,7 +21,7 @@ public class CompositionController : ControllerBase
     [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
     public async Task<IActionResult> CreateComposition( [FromBody] CompositionDto dto )
     {
-        CreateCompositionCommand command = new CreateCompositionCommand()
+        CreateCompositionCommand command = new()
         {
             Name = dto.Name,
             ShortDescription = dto.ShortDescription,

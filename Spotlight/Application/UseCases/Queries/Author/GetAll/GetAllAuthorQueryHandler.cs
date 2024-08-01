@@ -19,7 +19,7 @@ public class GetAllAuthorQueryHandler : IQueryHandler<GetAllAuthorQuery, IReadOn
 
         IReadOnlyList<GetAuthorQueryDto> response = authors.Select( author => new GetAuthorQueryDto()
         {
-            Id = author.AuthorId,
+            AuthorId = author.AuthorId,
             Name = author.Name,
             Birthday = author.Birthday,
         } ).ToList();

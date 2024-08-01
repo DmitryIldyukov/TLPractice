@@ -24,7 +24,7 @@ public class TheaterController : ControllerBase
     [HttpPost]
     [ProducesResponseType( typeof( int ), StatusCodes.Status200OK )]
     [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
-    public async Task<IActionResult> CreateTheater( [FromBody] TheaterDto dto, CancellationToken cancellationToken )
+    public async Task<IActionResult> CreateTheater( [FromBody] TheaterDto dto )
     {
         CreateTheaterCommand command = new()
         {
@@ -107,7 +107,7 @@ public class TheaterController : ControllerBase
     }
 
     [HttpDelete( "{theaterId:int}" )]
-    [ProducesResponseType( StatusCodes.Status200OK )]
+    [ProducesResponseType( StatusCodes.Status204NoContent )]
     public async Task<IActionResult> DeleteTheater( [FromRoute] int theaterId )
     {
         DeleteTheaterCommand command = new()

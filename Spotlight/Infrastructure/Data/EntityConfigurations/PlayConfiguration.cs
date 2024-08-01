@@ -12,8 +12,8 @@ public class PlayConfiguration : IEntityTypeConfiguration<Play>
             .HasKey( p => p.PlayId );
 
         builder.Property( p => p.PlayId )
-            .HasComment("Id представления")
-            .HasColumnName("play_id")
+            .HasComment( "Id представления" )
+            .HasColumnName( "play_id" )
             .ValueGeneratedOnAdd()
             .IsRequired();
 

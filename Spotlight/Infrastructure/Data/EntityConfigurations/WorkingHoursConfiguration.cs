@@ -32,9 +32,14 @@ public class WorkingHoursConfiguration : IEntityTypeConfiguration<WorkingHours>
             .HasColumnName( "closing_time" )
             .IsRequired();
 
+        builder.Property( wh => wh.TheaterId )
+            .HasComment( "Id театра" )
+            .HasColumnName( "theater_id" )
+            .IsRequired();
+
         builder.HasOne( wh => wh.Theater )
             .WithMany( t => t.WorkingHours )
-            .HasForeignKey( t => t.WorkingHoursId )
+            .HasForeignKey( wh => wh.TheaterId )
             .OnDelete( DeleteBehavior.Cascade );
     }
 }

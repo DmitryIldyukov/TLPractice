@@ -32,6 +32,7 @@ public class TheaterRepository : ITheaterRepository
     {
         return await _context.Theaters
             .Include( t => t.Plays )
+            .Include( t => t.WorkingHours )
             .ToListAsync();
     }
 
@@ -39,6 +40,7 @@ public class TheaterRepository : ITheaterRepository
     {
         return await _context.Theaters
             .Include( t => t.Plays )
+            .Include( t => t.WorkingHours )
             .FirstOrDefaultAsync( t => t.TheaterId == id );
     }
 }

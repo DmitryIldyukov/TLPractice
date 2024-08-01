@@ -67,6 +67,8 @@ public class WorkingHoursController : ControllerBase
     }
 
     [HttpGet( "[action]/{theaterId}/{dayOfWeek}" )]
+    [ProducesResponseType( typeof( GetWorkingHoursDto ), StatusCodes.Status200OK )]
+    [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
     public async Task<IActionResult> GetTheaterWorkingHoursOnDayOfWeek( [FromRoute] int theaterId, [FromRoute] DayOfWeek dayOfWeek )
     {
         GetWorkingHoursOnDayOfWeekQuery query = new()

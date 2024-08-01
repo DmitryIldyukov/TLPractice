@@ -10,9 +10,9 @@ public class CreateWorkingHoursCommandHandler : ICommandHandler<CreateWorkingHou
     private readonly ITheaterRepository _theaterRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public CreateWorkingHoursCommandHandler( 
-        IWorkingHoursRepository workingHoursRepository, 
-        ITheaterRepository theaterRepository, 
+    public CreateWorkingHoursCommandHandler(
+        IWorkingHoursRepository workingHoursRepository,
+        ITheaterRepository theaterRepository,
         IUnitOfWork unitOfWork )
     {
         _workingHoursRepository = workingHoursRepository;
@@ -41,7 +41,7 @@ public class CreateWorkingHoursCommandHandler : ICommandHandler<CreateWorkingHou
 
         await _workingHoursRepository.CreateWorkingHours( workingHours );
 
-        await _unitOfWork.SaveChangesAsync( cancellationToken );
+        await _unitOfWork.SaveChangesAsync();
 
         return workingHours.WorkingHoursId;
     }
