@@ -2,7 +2,7 @@
 
 public class WorkingHoursDto
 {
-    public DayOfWeek DayOfWeek { get; set; }
-    public TimeSpan OpeningTime { get; set; }
-    public TimeSpan ClosingTime { get; set; }
+    public DayOfWeek DayOfWeek { get; init; }
+    public TimeSpan OpeningTime { get; init; }
+    public TimeSpan ClosingTime { get; init; }
 }
