@@ -1,6 +1,7 @@
 ﻿using Application.Common.CQRS.Command;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
+using Domain.Exceptions;
 
 namespace Application.UseCases.Commands.Composition.Create;
 
@@ -36,7 +37,7 @@ public class CreateCompositionCommandHandler : ICommandHandler<CreateComposition
 
         if ( await _authorRepository.GetById( request.AuthorId ) is null )
         {
-            throw new ArgumentException( "Автор не найден." );
+            throw new NotFoundException( "Автор не найден." );
         }
 
         Domain.Entities.Composition composition = new Domain.Entities.Composition( request.Name, request.ShortDescription, request.HeroesInformation, request.AuthorId );

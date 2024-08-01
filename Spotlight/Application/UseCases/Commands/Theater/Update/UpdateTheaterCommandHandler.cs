@@ -1,6 +1,7 @@
 ﻿using Application.Common.CQRS.Command;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
+using Domain.Exceptions;
 using MediatR;
 
 namespace Application.UseCases.Commands.Theater.Update;
@@ -34,7 +35,7 @@ public class UpdateTheaterCommandHandler : ICommandHandler<UpdateTheaterCommand,
         }
 
         Domain.Entities.Theater theater = await _theaterRepository.GetById( command.TheaterId ) 
-            ?? throw new ArgumentException( "Театр не найден." );
+            ?? throw new NotFoundException( "Театр не найден." );
 
         theater.Name = command.Name;
         theater.Description = command.Description;

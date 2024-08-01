@@ -1,6 +1,7 @@
 ﻿using Application.Common.CQRS.Command;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
+using Domain.Exceptions;
 
 namespace Application.UseCases.Commands.Play.Create;
 
@@ -50,12 +51,12 @@ public class CreatePlayCommandHandler : ICommandHandler<CreatePlayCommand, int>
 
         if ( await _theaterRepository.GetById( command.TheaterId ) is null )
         {
-            throw new ArgumentException( "Театр не найден." );
+            throw new NotFoundException( "Театр не найден." );
         }
 
         if ( await _compositionRepository.GetById( command.CompositionId ) is null )
         {
-            throw new ArgumentException( "Композиция не найдена." );
+            throw new NotFoundException( "Композиция не найдена." );
         }
 
         Domain.Entities.WorkingHours workingHoursOnDayOfWeek = await _workingHoursRepository.GetOnDayOfWeek( command.TheaterId, command.StartDate.DayOfWeek )

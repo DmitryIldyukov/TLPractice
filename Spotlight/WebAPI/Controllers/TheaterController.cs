@@ -4,6 +4,7 @@ using Application.UseCases.Commands.Theater.Update;
 using Application.UseCases.Queries.Theater.Dtos;
 using Application.UseCases.Queries.Theater.GetAll;
 using Application.UseCases.Queries.Theater.GetById;
+using Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Dtos.Theater;
@@ -75,7 +76,7 @@ public class TheaterController : ControllerBase
 
             return Ok( theater );
         }
-        catch ( ArgumentException e )
+        catch ( NotFoundException e )
         {
             return NotFound( e.Message );
         }
@@ -99,6 +100,10 @@ public class TheaterController : ControllerBase
             await _mediator.Send( command );
 
             return Ok();
+        }
+        catch ( NotFoundException e )
+        {
+            return NotFound( e.Message );
         }
         catch ( ArgumentException e )
         {

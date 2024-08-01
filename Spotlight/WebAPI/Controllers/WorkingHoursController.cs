@@ -2,6 +2,7 @@
 using Application.UseCases.Queries.WorkingHours.Dtos;
 using Application.UseCases.Queries.WorkingHours.GetWorkingHoursByTheaterId;
 using Application.UseCases.Queries.WorkingHours.GetWorkingHoursOnDayOfWeek;
+using Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Dtos.WorkingHoures;
@@ -38,6 +39,10 @@ public class WorkingHoursController : ControllerBase
 
             return Ok( workingHoursId );
         }
+        catch ( NotFoundException e )
+        {
+            return NotFound( e.Message );
+        }
         catch ( ArgumentException e )
         {
             return BadRequest( e.Message );
@@ -60,9 +65,9 @@ public class WorkingHoursController : ControllerBase
 
             return Ok( workingHours );
         }
-        catch ( ArgumentException e )
+        catch ( NotFoundException e )
         {
-            return BadRequest( e.Message );
+            return NotFound( e.Message );
         }
     }
 
@@ -83,9 +88,9 @@ public class WorkingHoursController : ControllerBase
 
             return Ok( workingHours );
         }
-        catch ( ArgumentException e )
+        catch ( NotFoundException e )
         {
-            return BadRequest( e.Message );
+            return NotFound( e.Message );
         }
     }
 }

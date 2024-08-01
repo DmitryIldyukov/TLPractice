@@ -2,6 +2,7 @@
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.UseCases.Queries.Theater.Dtos;
+using Domain.Exceptions;
 
 namespace Application.UseCases.Queries.Theater.GetById;
 
@@ -19,7 +20,7 @@ public class GetTheaterByIdQueryHandler : IQueryHandler<GetTheaterByIdQuery, Get
     public async Task<GetTheaterDto> Handle( GetTheaterByIdQuery query, CancellationToken cancellationToken )
     {
         Domain.Entities.Theater theater = await _theaterRepository.GetById( query.TheaterId ) 
-            ?? throw new ArgumentException( "Театр не найден." );
+            ?? throw new NotFoundException( "Театр не найден." );
 
         GetTheaterDto response = new()
         {

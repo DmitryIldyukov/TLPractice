@@ -4,7 +4,9 @@ using Application.UseCases.Commands.Author.Update;
 using Application.UseCases.Queries.Author.Dtos;
 using Application.UseCases.Queries.Author.GetAll;
 using Application.UseCases.Queries.Author.GetById;
+using Domain.Exceptions;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Dtos.Author;
 using WebAPI.Dtos.Theater;
@@ -59,14 +61,21 @@ public class AuthorController : ControllerBase
     [HttpGet( "{authorId}" )]
     public async Task<IActionResult> GetAuthorById( [FromRoute] int authorId )
     {
-        GetAuthorByIdQuery query = new()
+        try
         {
-            AuthorId = authorId
-        };
+            GetAuthorByIdQuery query = new()
+            {
+                AuthorId = authorId
+            };
 
-        GetAuthorQueryDto author = await _mediator.Send( query );
+            GetAuthorQueryDto author = await _mediator.Send( query );
 
-        return Ok( author );
+            return Ok( author );
+        }
+        catch ( NotFoundException e )
+        {
+            return NotFound( e.Message );
+        }
     }
 
 
@@ -83,6 +92,10 @@ public class AuthorController : ControllerBase
         {
             await _mediator.Send( command );
             return Ok();
+        }
+        catch ( NotFoundException e )
+        {
+            return NotFound( e.Message );
         }
         catch ( ArgumentException e )
         {

@@ -1,6 +1,7 @@
 ﻿using Application.Common.CQRS.Query;
 using Application.Interfaces.Repositories;
 using Application.UseCases.Queries.WorkingHours.Dtos;
+using Domain.Exceptions;
 
 namespace Application.UseCases.Queries.WorkingHours.GetWorkingHoursByTheaterId;
 
@@ -19,7 +20,7 @@ public class GetWorkingHoursByTheaterIdQueryHandler : IQueryHandler<GetWorkingHo
     {
         if ( _theaterRepository.GetById( query.TheaterId ) is null )
         {
-            throw new ArgumentException( "Театр не найден." );
+            throw new NotFoundException( "Театр не найден." );
         }
 
         IEnumerable<Domain.Entities.WorkingHours> workingHours = await _workingHoursRepository.GetTheaterWorkingHours( query.TheaterId );

@@ -1,6 +1,7 @@
 ﻿using Application.Common.CQRS.Command;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
+using Domain.Exceptions;
 
 namespace Application.UseCases.Commands.WorkingHours.Create;
 
@@ -29,7 +30,7 @@ public class CreateWorkingHoursCommandHandler : ICommandHandler<CreateWorkingHou
 
         if ( await _theaterRepository.GetById( command.TheaterId ) is null )
         {
-            throw new ArgumentException( "Театр не найден." );
+            throw new NotFoundException( "Театр не найден." );
         }
 
         if ( await _workingHoursRepository.GetOnDayOfWeek( command.TheaterId, command.DayOfWeek ) is not null )

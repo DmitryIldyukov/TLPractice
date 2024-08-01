@@ -1,6 +1,7 @@
 ﻿using Application.UseCases.Commands.Play.Create;
 using Application.UseCases.Queries.Play.Dtos;
 using Application.UseCases.Queries.Play.GetByFilter;
+using Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Dtos.Play;
@@ -39,6 +40,10 @@ public class PlayController : ControllerBase
             int playId = await _mediator.Send( command );
 
             return Ok( playId );
+        }
+        catch ( NotFoundException e )
+        {
+            return NotFound( e.Message );
         }
         catch ( ArgumentException e )
         {

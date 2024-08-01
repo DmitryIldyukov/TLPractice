@@ -22,12 +22,18 @@ public class CreateAuthorCommandHandler : ICommandHandler<CreateAuthorCommand, i
             throw new ArgumentException( "Имя автора не может быть пустым." );
         }
 
-        int age = DateTime.Now.Year - command.Birthday.Year;
-
-        if ( age < 5 )
+        if ( command.Birthday == DateTime.MinValue )
         {
-            throw new ArgumentException( "Минимальный возраст автора 5 лет." );
+            throw new ArgumentException( "Дата рождения не может быть пустой." );
         }
+
+        int currentAge = DateTime.Now.Year - command.Birthday.Year;
+
+        if ( currentAge < 10 )
+        {
+            throw new ArgumentException( "Минимальный возраст автора 10 лет." );
+        }
+
         Domain.Entities.Author author = new Domain.Entities.Author( command.Name, command.Birthday );
 
         await _authorRepository.Create( author );

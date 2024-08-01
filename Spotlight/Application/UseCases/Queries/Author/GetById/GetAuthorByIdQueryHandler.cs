@@ -2,6 +2,7 @@
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.UseCases.Queries.Author.Dtos;
+using Domain.Exceptions;
 
 namespace Application.UseCases.Queries.Author.GetById;
 
@@ -19,7 +20,7 @@ public class GetAuthorByIdQueryHandler : IQueryHandler<GetAuthorByIdQuery, GetAu
     public async Task<GetAuthorQueryDto> Handle( GetAuthorByIdQuery query, CancellationToken cancellationToken )
     {
         Domain.Entities.Author author = await _authorRepository.GetById( query.AuthorId )
-            ?? throw new ArgumentException( "Автор не найден." );
+            ?? throw new NotFoundException( "Автор не найден." );
 
         GetAuthorQueryDto response = new()
         {

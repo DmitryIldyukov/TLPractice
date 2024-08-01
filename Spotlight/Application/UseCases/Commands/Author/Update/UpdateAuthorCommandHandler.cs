@@ -1,6 +1,7 @@
 ﻿using Application.Common.CQRS.Command;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
+using Domain.Exceptions;
 using MediatR;
 
 namespace Application.UseCases.Commands.Author.Update;
@@ -24,7 +25,7 @@ public class UpdateAuthorCommandHandler : ICommandHandler<UpdateAuthorCommand, U
         }
 
         Domain.Entities.Author author = await _authorRepository.GetById( command.AuthorId )
-            ?? throw new ArgumentException( "Автор не найден." );
+            ?? throw new NotFoundException( "Автор не найден." );
 
         author.Name = command.Name;
 

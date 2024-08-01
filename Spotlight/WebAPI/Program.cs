@@ -3,32 +3,45 @@ using Infrastructure.Configuration;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder( args );
-
-var connectionString = builder.Configuration.GetConnectionString( "MSSQLSpotlight" );
-builder.Services.AddDbContext<SpotlightDbContext>( options =>
+try
 {
-    options.UseSqlServer( connectionString );
-} );
+    var builder = WebApplication.CreateBuilder( args );
 
-builder.Services
-    .AddApplication()
-    .AddInfrastructure();
+    var connectionString = builder.Configuration.GetConnectionString( "MSSQLSpotlight" );
+    builder.Services.AddDbContext<SpotlightDbContext>( options =>
+    {
+        options.UseSqlServer( connectionString );
+    } );
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+    builder.Services
+        .AddApplication()
+        .AddInfrastructure();
 
-var app = builder.Build();
+    builder.Services.AddControllers();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
 
-if ( app.Environment.IsDevelopment() )
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var app = builder.Build();
+
+    if ( app.Environment.IsDevelopment() )
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    app.UseAuthorization();
+
+    app.MapControllers();
+
+    app.Run();
+
 }
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+catch ( Exception ex )
+{
+    Console.WriteLine( ex.Message );
+    Console.WriteLine( "Сервер неожиданно завершил работу." );
+}
+finally
+{
+    Console.WriteLine( "Сервер отключается..." );
+}

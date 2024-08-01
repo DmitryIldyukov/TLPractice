@@ -1,4 +1,5 @@
 ﻿using Application.UseCases.Commands.Composition.Create;
+using Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Dtos.Composition;
@@ -34,6 +35,10 @@ public class CompositionController : ControllerBase
             int compositionId = await _mediator.Send( command );
 
             return Ok( compositionId );
+        }
+        catch ( NotFoundException e )
+        {
+            return NotFound( e.Message );
         }
         catch ( ArgumentException e )
         {
