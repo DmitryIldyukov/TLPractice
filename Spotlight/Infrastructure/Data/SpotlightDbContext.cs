@@ -15,7 +15,7 @@ public class SpotlightDbContext : DbContext
     public DbSet<Play> Plays { get; set; }
     public DbSet<Author> Authors { get; set; }
     public DbSet<Composition> Compositions { get; set; }
-    public DbSet<WorkingHours> WorkingHours { get; set; }
+    public DbSet<TheaterHours> TheaterHours { get; set; }
 
     #endregion
 

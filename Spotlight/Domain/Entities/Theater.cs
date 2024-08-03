@@ -10,7 +10,7 @@ public class Theater
     public string PhoneNumber { get; set; }
 
     public ICollection<Play> Plays { get; set; } = new HashSet<Play>();
-    public ICollection<WorkingHours> WorkingHours { get; set; } = new HashSet<WorkingHours>();
+    public ICollection<TheaterHours> TheaterHours { get; set; } = new HashSet<TheaterHours>();
 
     public Theater(
         string name,

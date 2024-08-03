@@ -50,7 +50,7 @@ public class TheaterConfiguration : IEntityTypeConfiguration<Theater>
             .HasForeignKey( p => p.TheaterId )
             .OnDelete( DeleteBehavior.Cascade );
 
-        builder.HasMany( t => t.WorkingHours )
+        builder.HasMany( t => t.TheaterHours )
             .WithOne( wh => wh.Theater )
             .HasForeignKey ( wh => wh.TheaterId )
             .OnDelete( DeleteBehavior.Cascade );

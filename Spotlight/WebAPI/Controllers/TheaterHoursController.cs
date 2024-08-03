@@ -1,21 +1,21 @@
-﻿using Application.UseCases.Commands.WorkingHours.Create;
-using Application.UseCases.Queries.WorkingHours.Dtos;
-using Application.UseCases.Queries.WorkingHours.GetWorkingHoursByTheaterId;
-using Application.UseCases.Queries.WorkingHours.GetWorkingHoursOnDayOfWeek;
+﻿using Application.UseCases.Commands.TheaterHours.Create;
+using Application.UseCases.Queries.TheaterHours.Dtos;
+using Application.UseCases.Queries.TheaterHours.GetTheaterHoursByTheaterId;
+using Application.UseCases.Queries.TheaterHours.GetTheaterHoursOnDayOfWeek;
 using Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using WebAPI.Dtos.WorkingHoures;
+using WebAPI.Dtos.TheaterHoures;
 
 namespace WebAPI.Controllers;
 
 [ApiController]
 [Route( "api/[controller]" )]
-public class WorkingHoursController : ControllerBase
+public class TheaterHoursController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public WorkingHoursController( IMediator mediator )
+    public TheaterHoursController( IMediator mediator )
     {
         _mediator = mediator;
     }
@@ -23,9 +23,9 @@ public class WorkingHoursController : ControllerBase
     [HttpPost( "{theaterId:int}" )]
     [ProducesResponseType( typeof( int ), StatusCodes.Status200OK )]
     [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
-    public async Task<IActionResult> AddWorkingHours( [FromRoute] int theaterId, [FromBody] WorkingHoursDto dto )
+    public async Task<IActionResult> AddTheaterHours( [FromRoute] int theaterId, [FromBody] TheaterHoursDto dto )
     {
-        CreateWorkingHoursCommand command = new()
+        CreateTheaterHoursCommand command = new()
         {
             TheaterId = theaterId,
             DayOfWeek = dto.DayOfWeek,
@@ -35,9 +35,9 @@ public class WorkingHoursController : ControllerBase
 
         try
         {
-            int workingHoursId = await _mediator.Send( command );
+            int theaterHoursId = await _mediator.Send( command );
 
-            return Ok( workingHoursId );
+            return Ok( theaterHoursId );
         }
         catch ( NotFoundException e )
         {
@@ -50,20 +50,20 @@ public class WorkingHoursController : ControllerBase
     }
 
     [HttpGet( "[action]/{theaterId:int}" )]
-    [ProducesResponseType( typeof( IReadOnlyList<GetWorkingHoursDto> ), StatusCodes.Status200OK )]
+    [ProducesResponseType( typeof( IReadOnlyList<GetTheaterHoursDto> ), StatusCodes.Status200OK )]
     [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
-    public async Task<IActionResult> GetTheaterWorkingHourse( [FromRoute] int theaterId )
+    public async Task<IActionResult> GetTheaterHourse( [FromRoute] int theaterId )
     {
-        GetWorkingHoursByTheaterIdQuery query = new()
+        GetTheaterHoursByTheaterIdQuery query = new()
         {
             TheaterId = theaterId
         };
 
         try
         {
-            IReadOnlyList<GetWorkingHoursDto> workingHours = await _mediator.Send( query );
+            IReadOnlyList<GetTheaterHoursDto> theaterHours = await _mediator.Send( query );
 
-            return Ok( workingHours );
+            return Ok( theaterHours );
         }
         catch ( NotFoundException e )
         {
@@ -72,11 +72,11 @@ public class WorkingHoursController : ControllerBase
     }
 
     [HttpGet( "[action]/{theaterId}/{dayOfWeek}" )]
-    [ProducesResponseType( typeof( GetWorkingHoursDto ), StatusCodes.Status200OK )]
+    [ProducesResponseType( typeof( GetTheaterHoursDto ), StatusCodes.Status200OK )]
     [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
-    public async Task<IActionResult> GetTheaterWorkingHoursOnDayOfWeek( [FromRoute] int theaterId, [FromRoute] DayOfWeek dayOfWeek )
+    public async Task<IActionResult> GetTheaterHoursOnDayOfWeek( [FromRoute] int theaterId, [FromRoute] DayOfWeek dayOfWeek )
     {
-        GetWorkingHoursOnDayOfWeekQuery query = new()
+        GetTheaterHoursOnDayOfWeekQuery query = new()
         {
             TheaterId = theaterId,
             DayOfWeek = dayOfWeek
@@ -84,9 +84,9 @@ public class WorkingHoursController : ControllerBase
 
         try
         {
-            GetWorkingHoursDto workingHours = await _mediator.Send( query );
+            GetTheaterHoursDto theaterHours = await _mediator.Send( query );
 
-            return Ok( workingHours );
+            return Ok( theaterHours );
         }
         catch ( NotFoundException e )
         {

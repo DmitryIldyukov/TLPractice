@@ -10,7 +10,7 @@ public class CreatePlayCommandHandler : ICommandHandler<CreatePlayCommand, int>
     private readonly IPlayRepository _playRepository;
     private readonly ITheaterRepository _theaterRepository;
     private readonly ICompositionRepository _compositionRepository;
-    private readonly IWorkingHoursRepository _workingHoursRepository;
+    private readonly ITheaterHoursRepository _theaterHoursRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public CreatePlayCommandHandler(
@@ -18,13 +18,13 @@ public class CreatePlayCommandHandler : ICommandHandler<CreatePlayCommand, int>
         IUnitOfWork unitOfWork,
         ITheaterRepository theaterRepository,
         ICompositionRepository compositionRepository,
-        IWorkingHoursRepository workingHoursRepository )
+        ITheaterHoursRepository theaterHoursRepository )
     {
         _playRepository = playRepository;
         _unitOfWork = unitOfWork;
         _theaterRepository = theaterRepository;
         _compositionRepository = compositionRepository;
-        _workingHoursRepository = workingHoursRepository;
+        _theaterHoursRepository = theaterHoursRepository;
     }
 
     public async Task<int> Handle( CreatePlayCommand command, CancellationToken cancellationToken )
@@ -59,13 +59,13 @@ public class CreatePlayCommandHandler : ICommandHandler<CreatePlayCommand, int>
             throw new NotFoundException( "Композиция не найдена." );
         }
 
-        Domain.Entities.WorkingHours workingHoursOnDayOfWeek = await _workingHoursRepository.GetOnDayOfWeek( command.TheaterId, command.StartDate.DayOfWeek )
+        Domain.Entities.TheaterHours theaterHoursOnDayOfWeek = await _theaterHoursRepository.GetOnDayOfWeek( command.TheaterId, command.StartDate.DayOfWeek )
             ?? throw new ArgumentException( "Невозможно добавить представление. Театр в этот день не работает." );
 
         TimeSpan startTime = command.StartDate.TimeOfDay;
         TimeSpan endTime = command.EndDate.TimeOfDay;
-        TimeSpan openingTime = workingHoursOnDayOfWeek.OpeningTime;
-        TimeSpan closingTime = workingHoursOnDayOfWeek.ClosingTime;
+        TimeSpan openingTime = theaterHoursOnDayOfWeek.OpeningTime;
+        TimeSpan closingTime = theaterHoursOnDayOfWeek.ClosingTime;
 
         if ( startTime < openingTime || endTime > closingTime )
         {

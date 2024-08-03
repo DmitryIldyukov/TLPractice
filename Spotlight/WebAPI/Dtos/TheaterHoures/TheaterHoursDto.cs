@@ -1,6 +1,6 @@
-﻿namespace WebAPI.Dtos.WorkingHoures;
+﻿namespace WebAPI.Dtos.TheaterHoures;
 
-public class WorkingHoursDto
+public class TheaterHoursDto
 {
     public DayOfWeek DayOfWeek { get; init; }
     public TimeSpan OpeningTime { get; init; }

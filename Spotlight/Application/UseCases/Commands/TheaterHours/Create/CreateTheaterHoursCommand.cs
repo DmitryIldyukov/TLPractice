@@ -1,8 +1,9 @@
-﻿namespace Application.UseCases.Queries.WorkingHours.Dtos;
+﻿using Application.Common.CQRS.Command;
 
-public class GetWorkingHoursDto
+namespace Application.UseCases.Commands.TheaterHours.Create;
+
+public class CreateTheaterHoursCommand : ICommand<int>
 {
-    public int WorkingHoursId { get; init; }
     public int TheaterId { get; init; }
     public DayOfWeek DayOfWeek { get; init; }
     public TimeSpan OpeningTime { get; init; }

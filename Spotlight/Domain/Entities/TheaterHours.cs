@@ -1,8 +1,8 @@
 ﻿namespace Domain.Entities;
 
-public class WorkingHours
+public class TheaterHours
 {
-    public int WorkingHoursId { get; init; }
+    public int TheaterHoursId { get; init; }
     public DayOfWeek DayOfWeek { get; set; }
     public TimeSpan OpeningTime { get; set; }
     public TimeSpan ClosingTime { get; set; }
@@ -10,7 +10,7 @@ public class WorkingHours
     public int TheaterId { get; set; }
     public Theater Theater { get; set; }
 
-    public WorkingHours( DayOfWeek dayOfWeek, TimeSpan openingTime, TimeSpan closingTime, int theaterId )
+    public TheaterHours( DayOfWeek dayOfWeek, TimeSpan openingTime, TimeSpan closingTime, int theaterId )
     {
         DayOfWeek = dayOfWeek;
         OpeningTime = openingTime;

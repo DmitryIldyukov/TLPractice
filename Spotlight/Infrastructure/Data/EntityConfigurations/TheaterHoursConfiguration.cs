@@ -4,16 +4,16 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Data.EntityConfigurations;
 
-public class WorkingHoursConfiguration : IEntityTypeConfiguration<WorkingHours>
+public class TheaterHoursConfiguration : IEntityTypeConfiguration<TheaterHours>
 {
-    public void Configure( EntityTypeBuilder<WorkingHours> builder )
+    public void Configure( EntityTypeBuilder<TheaterHours> builder )
     {
-        builder.ToTable( "working_hours" )
-            .HasKey( wh => wh.WorkingHoursId );
+        builder.ToTable( "theater_hours" )
+            .HasKey( wh => wh.TheaterHoursId );
 
-        builder.Property( wh => wh.WorkingHoursId )
+        builder.Property( wh => wh.TheaterHoursId )
             .HasComment( "Id режима работы" )
-            .HasColumnName( "working_hours_id" )
+            .HasColumnName( "theater_hours_id" )
             .ValueGeneratedOnAdd()
             .IsRequired();
 
@@ -38,7 +38,7 @@ public class WorkingHoursConfiguration : IEntityTypeConfiguration<WorkingHours>
             .IsRequired();
 
         builder.HasOne( wh => wh.Theater )
-            .WithMany( t => t.WorkingHours )
+            .WithMany( t => t.TheaterHours )
             .HasForeignKey( wh => wh.TheaterId )
             .OnDelete( DeleteBehavior.Cascade );
     }
