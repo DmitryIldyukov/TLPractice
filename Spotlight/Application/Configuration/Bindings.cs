@@ -19,7 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.Configuration;
 
-public static class DependencyInjection
+public static class Bindings
 {
     public static IServiceCollection AddApplication( this IServiceCollection services )
     {
@@ -42,7 +42,7 @@ public static class DependencyInjection
         services.AddTransient<IValidator<DeleteTheaterCommand>, DeleteTheaterCommandValidator>();
         services.AddTransient<IValidator<DeleteAuthorCommand>, DeleteAuthorCommandValidator>();
 
-        services.AddMediatR( typeof( DependencyInjection ).Assembly );
+        services.AddMediatR( typeof( Bindings ).Assembly );
 
         return services;
     }
