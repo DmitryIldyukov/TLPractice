@@ -10,7 +10,7 @@ try
     var connectionString = builder.Configuration.GetConnectionString( "MSSQLSpotlight" );
     builder.Services.AddDbContext<SpotlightDbContext>( options =>
     {
-        options.UseSqlServer( connectionString );
+        options.UseSqlServer( connectionString, b => b.MigrationsAssembly("Infrastructure.Migrations") );
     } );
 
     builder.Services

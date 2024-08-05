@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Infrastructure.Data.Migrations
+namespace Infrastructure.Migrations
 {
     [DbContext(typeof(SpotlightDbContext))]
-    [Migration("20240801033059_AddWorkingHours")]
-    partial class AddWorkingHours
+    [Migration("20240803123758_RenameWorkingHoursToTheaterHours")]
+    partial class RenameWorkingHoursToTheaterHours
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -197,15 +197,15 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("theaters", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.WorkingHours", b =>
+            modelBuilder.Entity("Domain.Entities.TheaterHours", b =>
                 {
-                    b.Property<int>("WorkingHoursId")
+                    b.Property<int>("TheaterHoursId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("working_hours_id")
+                        .HasColumnName("theater_hours_id")
                         .HasComment("Id режима работы");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WorkingHoursId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TheaterHoursId"));
 
                     b.Property<TimeSpan>("ClosingTime")
                         .HasColumnType("time")
@@ -227,11 +227,11 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("theater_id")
                         .HasComment("Id театра");
 
-                    b.HasKey("WorkingHoursId");
+                    b.HasKey("TheaterHoursId");
 
                     b.HasIndex("TheaterId");
 
-                    b.ToTable("working_hours", (string)null);
+                    b.ToTable("theater_hours", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Composition", b =>
@@ -264,10 +264,10 @@ namespace Infrastructure.Data.Migrations
                     b.Navigation("Theater");
                 });
 
-            modelBuilder.Entity("Domain.Entities.WorkingHours", b =>
+            modelBuilder.Entity("Domain.Entities.TheaterHours", b =>
                 {
                     b.HasOne("Domain.Entities.Theater", "Theater")
-                        .WithMany("WorkingHours")
+                        .WithMany("TheaterHours")
                         .HasForeignKey("TheaterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -289,7 +289,7 @@ namespace Infrastructure.Data.Migrations
                 {
                     b.Navigation("Plays");
 
-                    b.Navigation("WorkingHours");
+                    b.Navigation("TheaterHours");
                 });
 #pragma warning restore 612, 618
         }
