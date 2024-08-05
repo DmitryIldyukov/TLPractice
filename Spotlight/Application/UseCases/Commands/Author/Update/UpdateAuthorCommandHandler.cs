@@ -22,6 +22,12 @@ public class UpdateAuthorCommandHandler : ICommandHandler<UpdateAuthorCommand, U
 
     public async Task<Unit> Handle( UpdateAuthorCommand command, CancellationToken cancellationToken )
     {
+        var validationResult = await _validator.ValidateAsync( command, cancellationToken );
+        if ( !validationResult.IsValid )
+        {
+            throw new ValidationException( validationResult.Errors );
+        }
+
         if ( string.IsNullOrEmpty( command.Name ) )
         {
             throw new ArgumentException( "Имя автора не может быть пустым." );
