@@ -30,11 +30,12 @@ public class PlayRepository : IPlayRepository
         }
     }
 
-    public async Task<IEnumerable<Play>> GetAll()
+    public async Task<IEnumerable<Play>> GetAllTheaterPlays( int theaterId )
     {
         return await _context.Plays
             .Include( p => p.Theater )
             .Include( p => p.Composition )
+            .Where( p => p.TheaterId == theaterId )
             .ToListAsync();
     }
 

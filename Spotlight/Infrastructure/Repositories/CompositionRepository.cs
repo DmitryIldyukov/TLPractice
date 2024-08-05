@@ -28,11 +28,12 @@ public class CompositionRepository : ICompositionRepository
         }
     }
 
-    public async Task<IEnumerable<Composition>> GetAll()
+    public async Task<IEnumerable<Composition>> GetAllAuthorCompositions( int authorId )
     {
         return await _context.Compositions
             .Include( c => c.Plays )
             .Include( c => c.Author )
+            .Where( c => c.AuthorId == authorId )
             .ToListAsync();
     }
 
