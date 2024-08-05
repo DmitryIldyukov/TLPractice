@@ -1,6 +1,7 @@
 ﻿using Application.Common.CQRS.Command;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
+using FluentValidation;
 
 namespace Application.UseCases.Commands.Author.Create;
 
@@ -8,30 +9,21 @@ public class CreateAuthorCommandHandler : ICommandHandler<CreateAuthorCommand, i
 {
     private readonly IAuthorRepository _authorRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IValidator<CreateAuthorCommand> _validator;
 
-    public CreateAuthorCommandHandler( IAuthorRepository authorRepository, IUnitOfWork unitOfWork )
+    public CreateAuthorCommandHandler( IAuthorRepository authorRepository, IUnitOfWork unitOfWork, IValidator<CreateAuthorCommand> validator )
     {
         _authorRepository = authorRepository;
         _unitOfWork = unitOfWork;
+        _validator = validator;
     }
 
     public async Task<int> Handle( CreateAuthorCommand command, CancellationToken cancellationToken )
     {
-        if ( string.IsNullOrEmpty( command.Name ) )
+        var validationResult = await _validator.ValidateAsync( command, cancellationToken );
+        if ( !validationResult.IsValid )
         {
-            throw new ArgumentException( "Имя автора не может быть пустым." );
-        }
-
-        if ( command.Birthday == DateTime.MinValue )
-        {
-            throw new ArgumentException( "Дата рождения не может быть пустой." );
-        }
-
-        int currentAge = DateTime.Now.Year - command.Birthday.Year;
-
-        if ( currentAge < 10 )
-        {
-            throw new ArgumentException( "Минимальный возраст автора 10 лет." );
+            throw new ValidationException( validationResult.Errors );
         }
 
         Domain.Entities.Author author = new Domain.Entities.Author( command.Name, command.Birthday );

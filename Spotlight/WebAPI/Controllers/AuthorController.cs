@@ -6,7 +6,6 @@ using Application.UseCases.Queries.Author.GetAll;
 using Application.UseCases.Queries.Author.GetById;
 using Domain.Exceptions;
 using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Dtos.Author;
 using WebAPI.Dtos.Theater;
@@ -26,7 +25,7 @@ public class AuthorController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType( typeof( int ), StatusCodes.Status200OK )]
-    [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
+    [ProducesResponseType( typeof( IReadOnlyList<string> ), StatusCodes.Status400BadRequest )]
     public async Task<IActionResult> CreateAuthor( [FromBody] AuthorDto dto )
     {
         CreateAuthorCommand command = new()
@@ -41,9 +40,9 @@ public class AuthorController : ControllerBase
 
             return Ok( authorId );
         }
-        catch ( ArgumentException e )
+        catch ( FluentValidation.ValidationException e )
         {
-            return BadRequest( e.Message );
+            return BadRequest( e.Errors.Select( error => error.ErrorMessage ).ToList() );
         }
     }
 
@@ -59,6 +58,9 @@ public class AuthorController : ControllerBase
     }
 
     [HttpGet( "{authorId}" )]
+    [ProducesResponseType( typeof( IReadOnlyList<GetAuthorQueryDto> ), StatusCodes.Status200OK )]
+    [ProducesResponseType( typeof( string ), StatusCodes.Status404NotFound )]
+    [ProducesResponseType( typeof( IReadOnlyList<string> ), StatusCodes.Status400BadRequest )]
     public async Task<IActionResult> GetAuthorById( [FromRoute] int authorId )
     {
         try
@@ -72,6 +74,10 @@ public class AuthorController : ControllerBase
 
             return Ok( author );
         }
+        catch ( FluentValidation.ValidationException e )
+        {
+            return BadRequest( e.Errors.Select( error => error.ErrorMessage ).ToList() );
+        }
         catch ( NotFoundException e )
         {
             return NotFound( e.Message );
@@ -80,6 +86,9 @@ public class AuthorController : ControllerBase
 
 
     [HttpPut( "{authorId:int}" )]
+    [ProducesResponseType( StatusCodes.Status200OK )]
+    [ProducesResponseType( typeof( string ), StatusCodes.Status404NotFound )]
+    [ProducesResponseType( typeof( IReadOnlyList<string> ), StatusCodes.Status400BadRequest )]
     public async Task<IActionResult> UpdateAuthor( [FromRoute] int authorId, [FromBody] AuthorUpdateDto dto )
     {
         UpdateAuthorCommand command = new()
@@ -93,17 +102,19 @@ public class AuthorController : ControllerBase
             await _mediator.Send( command );
             return Ok();
         }
+        catch ( FluentValidation.ValidationException e )
+        {
+            return BadRequest( e.Errors.Select( error => error.ErrorMessage ).ToList() );
+        }
         catch ( NotFoundException e )
         {
             return NotFound( e.Message );
         }
-        catch ( ArgumentException e )
-        {
-            return BadRequest( e.Message );
-        }
     }
 
     [HttpDelete( "{authorId:int}" )]
+    [ProducesResponseType( StatusCodes.Status204NoContent )]
+    [ProducesResponseType( typeof( IReadOnlyList<string> ), StatusCodes.Status400BadRequest )]
     public async Task<IActionResult> DeleteAuthor( [FromRoute] int authorId )
     {
         DeleteAuthorCommand command = new()
@@ -111,8 +122,15 @@ public class AuthorController : ControllerBase
             AuthorId = authorId
         };
 
-        await _mediator.Send( command );
+        try
+        {
+            await _mediator.Send( command );
 
-        return NoContent();
+            return NoContent();
+        }
+        catch ( FluentValidation.ValidationException e )
+        {
+            return BadRequest( e.Errors.Select( error => error.ErrorMessage ).ToList() );
+        }
     }
 }

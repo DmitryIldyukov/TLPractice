@@ -1,7 +1,9 @@
-﻿using Application.Common.CQRS.Command;
+﻿using System.ComponentModel.DataAnnotations;
+using Application.Common.CQRS.Command;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Domain.Exceptions;
+using FluentValidation;
 
 namespace Application.UseCases.Commands.Play.Create;
 
@@ -12,41 +14,31 @@ public class CreatePlayCommandHandler : ICommandHandler<CreatePlayCommand, int>
     private readonly ICompositionRepository _compositionRepository;
     private readonly ITheaterHoursRepository _theaterHoursRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IValidator<CreatePlayCommand> _validator;
 
     public CreatePlayCommandHandler(
         IPlayRepository playRepository,
         IUnitOfWork unitOfWork,
         ITheaterRepository theaterRepository,
         ICompositionRepository compositionRepository,
-        ITheaterHoursRepository theaterHoursRepository )
+        ITheaterHoursRepository theaterHoursRepository,
+        IValidator<CreatePlayCommand> validator )
     {
         _playRepository = playRepository;
         _unitOfWork = unitOfWork;
         _theaterRepository = theaterRepository;
         _compositionRepository = compositionRepository;
         _theaterHoursRepository = theaterHoursRepository;
+        _validator = validator;
     }
 
     public async Task<int> Handle( CreatePlayCommand command, CancellationToken cancellationToken )
     {
-        if ( string.IsNullOrEmpty( command.Name ) )
-        {
-            throw new ArgumentException( "Название представления не может быть пустым." );
-        }
+        var validationResult = await _validator.ValidateAsync( command, cancellationToken );
 
-        if ( string.IsNullOrEmpty( command.Description ) )
+        if ( !validationResult.IsValid )
         {
-            throw new ArgumentException( "Описание представления не может быть пустым." );
-        }
-
-        if ( command.TicketPrice < 0 )
-        {
-            throw new ArgumentException( "Цена билета не может быть отрицательной." );
-        }
-
-        if ( command.StartDate >= command.EndDate )
-        {
-            throw new ArgumentException( "Дата начала должна быть раньше даты конца." );
+            throw new FluentValidation.ValidationException( validationResult.Errors );
         }
 
         if ( await _theaterRepository.GetById( command.TheaterId ) is null )

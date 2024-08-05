@@ -2,6 +2,7 @@
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Domain.Exceptions;
+using FluentValidation;
 
 namespace Application.UseCases.Commands.TheaterHours.Create;
 
@@ -10,22 +11,26 @@ public class CreateTheaterHoursCommandHandler : ICommandHandler<CreateTheaterHou
     private readonly ITheaterHoursRepository _theaterHoursRepository;
     private readonly ITheaterRepository _theaterRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IValidator<CreateTheaterHoursCommand> _validator;
 
     public CreateTheaterHoursCommandHandler(
         ITheaterHoursRepository theaterHoursRepository,
         ITheaterRepository theaterRepository,
-        IUnitOfWork unitOfWork )
+        IUnitOfWork unitOfWork,
+        IValidator<CreateTheaterHoursCommand> validator )
     {
         _theaterHoursRepository = theaterHoursRepository;
         _theaterRepository = theaterRepository;
         _unitOfWork = unitOfWork;
+        _validator = validator;
     }
 
     public async Task<int> Handle( CreateTheaterHoursCommand command, CancellationToken cancellationToken )
     {
-        if ( command.OpeningTime >= command.ClosingTime )
+        var validationResult = await _validator.ValidateAsync( command, cancellationToken );
+        if ( !validationResult.IsValid )
         {
-            throw new ArgumentException( "Дата открытия должна быть раньше даты закрытия." );
+            throw new ValidationException( validationResult.Errors );
         }
 
         if ( await _theaterRepository.GetById( command.TheaterId ) is null )

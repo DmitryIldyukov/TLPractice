@@ -22,7 +22,8 @@ public class TheaterHoursController : ControllerBase
 
     [HttpPost( "{theaterId:int}" )]
     [ProducesResponseType( typeof( int ), StatusCodes.Status200OK )]
-    [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
+    [ProducesResponseType( typeof( IReadOnlyList<string> ), StatusCodes.Status400BadRequest )]
+    [ProducesResponseType( typeof( string ), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AddTheaterHours( [FromRoute] int theaterId, [FromBody] TheaterHoursDto dto )
     {
         CreateTheaterHoursCommand command = new()
@@ -39,19 +40,20 @@ public class TheaterHoursController : ControllerBase
 
             return Ok( theaterHoursId );
         }
+        catch ( FluentValidation.ValidationException e )
+        {
+            return BadRequest( e.Errors.Select( error => error.ErrorMessage ).ToList() );
+        }
         catch ( NotFoundException e )
         {
             return NotFound( e.Message );
-        }
-        catch ( ArgumentException e )
-        {
-            return BadRequest( e.Message );
         }
     }
 
     [HttpGet( "[action]/{theaterId:int}" )]
     [ProducesResponseType( typeof( IReadOnlyList<GetTheaterHoursDto> ), StatusCodes.Status200OK )]
-    [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
+    [ProducesResponseType( typeof( IReadOnlyList<string> ), StatusCodes.Status400BadRequest )]
+    [ProducesResponseType( StatusCodes.Status404NotFound )]
     public async Task<IActionResult> GetTheaterHourse( [FromRoute] int theaterId )
     {
         GetTheaterHoursByTheaterIdQuery query = new()
@@ -65,6 +67,10 @@ public class TheaterHoursController : ControllerBase
 
             return Ok( theaterHours );
         }
+        catch ( FluentValidation.ValidationException e )
+        {
+            return BadRequest( e.Errors.Select( error => error.ErrorMessage ).ToList() );
+        }
         catch ( NotFoundException e )
         {
             return NotFound( e.Message );
@@ -73,7 +79,8 @@ public class TheaterHoursController : ControllerBase
 
     [HttpGet( "[action]/{theaterId}/{dayOfWeek}" )]
     [ProducesResponseType( typeof( GetTheaterHoursDto ), StatusCodes.Status200OK )]
-    [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
+    [ProducesResponseType( typeof( IReadOnlyList<string> ), StatusCodes.Status400BadRequest )]
+    [ProducesResponseType( StatusCodes.Status404NotFound )]
     public async Task<IActionResult> GetTheaterHoursOnDayOfWeek( [FromRoute] int theaterId, [FromRoute] DayOfWeek dayOfWeek )
     {
         GetTheaterHoursOnDayOfWeekQuery query = new()
@@ -87,6 +94,10 @@ public class TheaterHoursController : ControllerBase
             GetTheaterHoursDto theaterHours = await _mediator.Send( query );
 
             return Ok( theaterHours );
+        }
+        catch ( FluentValidation.ValidationException e )
+        {
+            return BadRequest( e.Errors.Select( error => error.ErrorMessage ).ToList() );
         }
         catch ( NotFoundException e )
         {

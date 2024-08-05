@@ -19,7 +19,8 @@ public class CompositionController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType( typeof( int ), StatusCodes.Status200OK )]
-    [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
+    [ProducesResponseType( typeof( string ), StatusCodes.Status404NotFound )]
+    [ProducesResponseType( typeof( IReadOnlyList<string> ), StatusCodes.Status400BadRequest )]
     public async Task<IActionResult> CreateComposition( [FromBody] CompositionDto dto )
     {
         CreateCompositionCommand command = new()
@@ -40,9 +41,9 @@ public class CompositionController : ControllerBase
         {
             return NotFound( e.Message );
         }
-        catch ( ArgumentException e )
+        catch ( FluentValidation.ValidationException e )
         {
-            return BadRequest( e.Message );
+            return BadRequest( e.Errors.Select( error => error.ErrorMessage ).ToList() );
         }
     }
 }

@@ -23,8 +23,8 @@ public class TheaterController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType( typeof( int ), StatusCodes.Status200OK )]
-    [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
+    [ProducesResponseType( typeof( int ), StatusCodes.Status201Created )]
+    [ProducesResponseType( typeof( IReadOnlyList<string> ), StatusCodes.Status400BadRequest )]
     public async Task<IActionResult> CreateTheater( [FromBody] TheaterDto dto )
     {
         CreateTheaterCommand command = new()
@@ -42,9 +42,9 @@ public class TheaterController : ControllerBase
 
             return Created( nameof( CreateTheater ), theaterId );
         }
-        catch ( ArgumentException e )
+        catch ( FluentValidation.ValidationException e )
         {
-            return BadRequest( e.Message );
+            return BadRequest( e.Errors.Select( error => error.ErrorMessage ).ToList() );
         }
     }
 
@@ -62,7 +62,8 @@ public class TheaterController : ControllerBase
 
     [HttpGet( "{theaterId:int}" )]
     [ProducesResponseType( typeof( GetTheaterDto ), StatusCodes.Status200OK )]
-    [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
+    [ProducesResponseType( typeof( IReadOnlyList<string> ), StatusCodes.Status400BadRequest )]
+    [ProducesResponseType( typeof( string ), StatusCodes.Status404NotFound )]
     public async Task<IActionResult> GetTheaterById( [FromRoute] int theaterId )
     {
         GetTheaterByIdQuery query = new()
@@ -76,6 +77,10 @@ public class TheaterController : ControllerBase
 
             return Ok( theater );
         }
+        catch ( FluentValidation.ValidationException e )
+        {
+            return BadRequest( e.Errors.Select( error => error.ErrorMessage ).ToList() );
+        }
         catch ( NotFoundException e )
         {
             return NotFound( e.Message );
@@ -84,7 +89,8 @@ public class TheaterController : ControllerBase
 
     [HttpPut( "{theaterId:int}" )]
     [ProducesResponseType( StatusCodes.Status200OK )]
-    [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
+    [ProducesResponseType( typeof( string ), StatusCodes.Status404NotFound )]
+    [ProducesResponseType( typeof( IReadOnlyList<string> ), StatusCodes.Status400BadRequest )]
     public async Task<IActionResult> UpdateTheater( [FromRoute] int theaterId, [FromBody] TheaterUpdateDto dto )
     {
         UpdateTheaterCommand command = new()
@@ -105,14 +111,15 @@ public class TheaterController : ControllerBase
         {
             return NotFound( e.Message );
         }
-        catch ( ArgumentException e )
+        catch ( FluentValidation.ValidationException e )
         {
-            return BadRequest( e.Message );
+            return BadRequest( e.Errors.Select( error => error.ErrorMessage ).ToList() );
         }
     }
 
     [HttpDelete( "{theaterId:int}" )]
     [ProducesResponseType( StatusCodes.Status204NoContent )]
+    [ProducesResponseType( typeof( IReadOnlyList<string> ), StatusCodes.Status400BadRequest )]
     public async Task<IActionResult> DeleteTheater( [FromRoute] int theaterId )
     {
         DeleteTheaterCommand command = new()
@@ -120,8 +127,15 @@ public class TheaterController : ControllerBase
             TheaterId = theaterId
         };
 
-        await _mediator.Send( command );
+        try
+        {
+            await _mediator.Send( command );
 
-        return NoContent();
+            return NoContent();
+        }
+        catch ( FluentValidation.ValidationException e )
+        {
+            return BadRequest( e.Errors.Select( error => error.ErrorMessage ).ToList() );
+        }
     }
 }

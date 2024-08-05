@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="EfCoreDialogsState">
+    <option name="keyValueStorage">
+      <map>
+        <entry key="Common:490cf98b-e897-4b87-8046-49426df6e8be:dbContext" value="Infrastructure.Data.SpotlightDbContext" />
+        <entry key="Common:6598c1a5-0ed2-4c7e-a1ab-d3fcde94a05e:dbContext" value="Infrastructure.Data.SpotlightDbContext" />
+        <entry key="Common:76c7cc96-a35f-4e89-9eff-e4a4c1c8d6b0:dbContext" value="Infrastructure.Data.SpotlightDbContext" />
+        <entry key="Common:buildConfiguration" value="Debug" />
+        <entry key="Common:noBuild" value="false" />
+        <entry key="Common:outputFolder" value="Migrations" />
+        <entry key="Common:useDefaultConnection" value="true" />
+      </map>
+    </option>
+  </component>
+</project>

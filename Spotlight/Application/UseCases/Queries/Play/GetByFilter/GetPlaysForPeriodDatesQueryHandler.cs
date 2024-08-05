@@ -1,23 +1,27 @@
 ﻿using Application.Common.CQRS.Query;
 using Application.Interfaces.Repositories;
 using Application.UseCases.Queries.Play.Dtos;
+using FluentValidation;
 
 namespace Application.UseCases.Queries.Play.GetByFilter;
 
 public class GetPlaysForPeriodDatesQueryHandler : IQueryHandler<GetPlaysForPeriodDatesQuery, IReadOnlyList<GetPlayDto>>
 {
     private readonly IPlayRepository _playRepository;
+    private readonly IValidator<GetPlaysForPeriodDatesQuery> _validator;
 
-    public GetPlaysForPeriodDatesQueryHandler( IPlayRepository playRepository )
+    public GetPlaysForPeriodDatesQueryHandler( IPlayRepository playRepository, IValidator<GetPlaysForPeriodDatesQuery> validator )
     {
         _playRepository = playRepository;
+        _validator = validator;
     }
 
     public async Task<IReadOnlyList<GetPlayDto>> Handle( GetPlaysForPeriodDatesQuery query, CancellationToken cancellationToken )
     {
-        if ( query.StartDate >= query.EndDate )
+        var validationResult = await _validator.ValidateAsync( query, cancellationToken );
+        if ( !validationResult.IsValid )
         {
-            throw new ArgumentException( "Неправильно указан период дат: дата начала не может быть позже даты окончания." );
+            throw new ValidationException( validationResult.Errors );
         }
 
         IEnumerable<Domain.Entities.Play> plays = await _playRepository.GetByDateFilter( query.StartDate, query.EndDate );

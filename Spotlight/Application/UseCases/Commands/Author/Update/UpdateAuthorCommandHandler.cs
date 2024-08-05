@@ -2,6 +2,7 @@
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Domain.Exceptions;
+using FluentValidation;
 using MediatR;
 
 namespace Application.UseCases.Commands.Author.Update;
@@ -10,11 +11,13 @@ public class UpdateAuthorCommandHandler : ICommandHandler<UpdateAuthorCommand, U
 {
     private readonly IAuthorRepository _authorRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IValidator<UpdateAuthorCommand> _validator;
 
-    public UpdateAuthorCommandHandler( IAuthorRepository authorRepository, IUnitOfWork unitOfWork )
+    public UpdateAuthorCommandHandler( IAuthorRepository authorRepository, IUnitOfWork unitOfWork, IValidator<UpdateAuthorCommand> validator )
     {
         _authorRepository = authorRepository;
         _unitOfWork = unitOfWork;
+        _validator = validator;
     }
 
     public async Task<Unit> Handle( UpdateAuthorCommand command, CancellationToken cancellationToken )

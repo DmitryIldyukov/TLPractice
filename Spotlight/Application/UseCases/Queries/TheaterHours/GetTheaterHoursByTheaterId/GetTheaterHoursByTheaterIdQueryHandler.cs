@@ -2,6 +2,7 @@
 using Application.Interfaces.Repositories;
 using Application.UseCases.Queries.TheaterHours.Dtos;
 using Domain.Exceptions;
+using FluentValidation;
 
 namespace Application.UseCases.Queries.TheaterHours.GetTheaterHoursByTheaterId;
 
@@ -9,15 +10,26 @@ public class GetTheaterHoursByTheaterIdQueryHandler : IQueryHandler<GetTheaterHo
 {
     private readonly ITheaterHoursRepository _theaterHoursRepository;
     private readonly ITheaterRepository _theaterRepository;
+    private readonly IValidator<GetTheaterHoursByTheaterIdQuery> _validator;
 
-    public GetTheaterHoursByTheaterIdQueryHandler( ITheaterHoursRepository theaterHoursRepository, ITheaterRepository theaterRepository )
+    public GetTheaterHoursByTheaterIdQueryHandler( 
+        ITheaterHoursRepository theaterHoursRepository, 
+        ITheaterRepository theaterRepository,
+        IValidator<GetTheaterHoursByTheaterIdQuery> validator )
     {
         _theaterHoursRepository = theaterHoursRepository;
         _theaterRepository = theaterRepository;
+        _validator = validator;
     }
 
     public async Task<IReadOnlyList<GetTheaterHoursDto>> Handle( GetTheaterHoursByTheaterIdQuery query, CancellationToken cancellationToken )
     {
+        var validationResult = await _validator.ValidateAsync( query, cancellationToken );
+        if ( !validationResult.IsValid )
+        {
+            throw new ValidationException( validationResult.Errors );
+        }
+
         if ( _theaterRepository.GetById( query.TheaterId ) is null )
         {
             throw new NotFoundException( "Театр не найден." );

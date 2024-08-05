@@ -21,7 +21,8 @@ public class PlayController : ControllerBase
 
     [HttpPost( "[action]" )]
     [ProducesResponseType( typeof( int ), StatusCodes.Status200OK )]
-    [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
+    [ProducesResponseType( typeof( string ), StatusCodes.Status404NotFound )]
+    [ProducesResponseType( typeof( IReadOnlyList<string> ), StatusCodes.Status400BadRequest )]
     public async Task<IActionResult> CreatePlay( [FromBody] PlayDto dto )
     {
         CreatePlayCommand command = new CreatePlayCommand()
@@ -45,15 +46,15 @@ public class PlayController : ControllerBase
         {
             return NotFound( e.Message );
         }
-        catch ( ArgumentException e )
+        catch ( FluentValidation.ValidationException e )
         {
-            return BadRequest( e.Message );
+            return BadRequest( e.Errors.Select( error => error.ErrorMessage ).ToList() );
         }
     }
 
     [HttpPost( "[action]" )]
     [ProducesResponseType( typeof( IReadOnlyList<GetPlayDto> ), StatusCodes.Status200OK )]
-    [ProducesResponseType( typeof( string ), StatusCodes.Status400BadRequest )]
+    [ProducesResponseType( typeof( IReadOnlyList<string> ), StatusCodes.Status400BadRequest )]
     public async Task<IActionResult> GetPlaysForPeriodDates( [FromBody] PlayPeriodFilter filter )
     {
         GetPlaysForPeriodDatesQuery query = new()
@@ -67,9 +68,9 @@ public class PlayController : ControllerBase
             IReadOnlyList<GetPlayDto> availablePlays = await _mediator.Send( query );
             return Ok( availablePlays );
         }
-        catch ( ArgumentException e )
+        catch ( FluentValidation.ValidationException e )
         {
-            return BadRequest( e.Message );
+            return BadRequest( e.Errors.Select( error => error.ErrorMessage ).ToList() );
         }
     }
 }
