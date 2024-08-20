@@ -1,0 +1,37 @@
+{
+  "name": "cards",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "jest",
+    "lint:eslint": "eslint .",
+    "lint:prettier": "prettier . --check",
+    "lint:cspell": "cspell **",
+    "lint": "npm-run-all lint:*",
+    "ci": "npm-run-all lint test build"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.4.8",
+    "@testing-library/react": "^16.0.0",
+    "@types/jest": "^29.5.12",
+    "@types/uuid": "^10.0.0",
+    "cspell": "^8.13.1",
+    "eslint": "8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "jest-environment-jsdom": "^29.7.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.3.3",
+    "ts-jest": "^29.2.4",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.0.0"
+  },
+  "dependencies": {
+    "uuid": "^10.0.0"
+  }
+}
