@@ -7,24 +7,6 @@ export type Deck = {
   cards: Card[];
 };
 
-export const addCard = (deck: Deck, newCard: Card): Deck => {
-  return {
-    ...deck,
-    cards: [...deck.cards, newCard],
-  };
-};
-
-export const deleteCard = (deck: Deck, cardId: string): Deck => {
-  return {
-    ...deck,
-    cards: deck.cards.filter(card => card.id !== cardId),
-  };
-};
-
-export const getCardById = (cards: Card[], cardId: string): Card | undefined => {
-  return cards.find(card => card.id === cardId);
-};
-
 export const editDeck = (deck: Deck, newName: string): Deck => {
   if (newName === ``) {
     return deck;
@@ -36,8 +18,16 @@ export const editDeck = (deck: Deck, newName: string): Deck => {
   };
 };
 
-export const getCards = (deck: Deck): Card[] => {
-  return [...deck.cards];
+export const addDeck = (decks: Deck[], deck: Deck): Deck[] => {
+  return [...decks, deck];
 };
 
-export const Deck = { addCard, deleteCard, getCardById, editDeck, getCards };
+export const deleteDeck = (decks: Deck[], deckId: string): Deck[] => {
+  return decks.filter(deck => deck.id !== deckId);
+};
+
+export const getDeckById = (decks: Deck[], deckId: string): Deck | undefined => {
+  return decks.find(deck => deck.id === deckId);
+};
+
+export const Deck = { editDeck, addDeck, deleteDeck, getDeckById };

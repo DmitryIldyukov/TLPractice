@@ -13,13 +13,13 @@ describe("LearningProcess", () => {
       cards: [
         {
           id: cardId1,
-          word: "card1",
-          translation: "Карточка1",
+          frontSide: "card1",
+          backSide: "Карточка1",
         },
         {
           id: cardId2,
-          word: "card2",
-          translation: "Карточка2",
+          frontSide: "card2",
+          backSide: "Карточка2",
         },
       ],
     };
@@ -32,7 +32,7 @@ describe("LearningProcess", () => {
 
     it("should remove the first card from the deck", () => {
       const updatedDeck = LearningProcess.removeCardFromLearningProcess(deck);
-      expect(updatedDeck.cards).toEqual([{ id: cardId2, word: "card2", translation: "Карточка2" }]);
+      expect(updatedDeck.cards).toEqual([{ id: cardId2, frontSide: "card2", backSide: "Карточка2" }]);
     });
 
     it("should return an empty array if the deck is empty", () => {
@@ -51,22 +51,22 @@ describe("LearningProcess", () => {
       cards: [
         {
           id: cardId1,
-          word: "card1",
-          translation: "Карточка1",
+          frontSide: "card1",
+          backSide: "Карточка1",
         },
         {
           id: cardId2,
-          word: "card2",
-          translation: "Карточка2",
+          frontSide: "card2",
+          backSide: "Карточка2",
         },
       ],
     };
 
     it("should move the first card to the bottom of the deck", () => {
-      const updatedDeck = LearningProcess.moveCardToBottomOfDeck(deck);
+      const updatedDeck = LearningProcess.moveCardToDeckBottom(deck);
       expect(updatedDeck.cards).toEqual([
-        { id: cardId2, word: "card2", translation: "Карточка2" },
-        { id: cardId1, word: "card1", translation: "Карточка1" },
+        { id: cardId2, frontSide: "card2", backSide: "Карточка2" },
+        { id: cardId1, frontSide: "card1", backSide: "Карточка1" },
       ]);
     });
 
@@ -76,7 +76,7 @@ describe("LearningProcess", () => {
         name: "deck",
         cards: [],
       };
-      const updatedDeck = LearningProcess.moveCardToBottomOfDeck(emptyDeck);
+      const updatedDeck = LearningProcess.moveCardToDeckBottom(emptyDeck);
       expect(updatedDeck).toEqual(emptyDeck);
     });
   });

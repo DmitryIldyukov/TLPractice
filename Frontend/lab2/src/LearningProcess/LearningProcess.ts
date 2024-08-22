@@ -11,11 +11,11 @@ export const removeCardFromLearningProcess = (deck: Deck): Deck => {
   };
 };
 
-export const moveCardToBottomOfDeck = (deck: Deck): Deck => {
+export const moveCardToDeckBottom = (deck: Deck): Deck => {
   return {
     ...deck,
     cards: [...deck.cards.slice(1), deck.cards[0]],
   };
 };
 
-export const LearningProcess = { removeCardFromLearningProcess, moveCardToBottomOfDeck };
+export const LearningProcess = { removeCardFromLearningProcess, moveCardToDeckBottom };
