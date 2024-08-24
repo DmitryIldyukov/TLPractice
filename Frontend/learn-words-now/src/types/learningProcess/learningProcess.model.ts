@@ -1,8 +1,8 @@
 import { Deck } from "../deck/deck.model";
 
-export interface LearningProcess {
+export type LearningProcess = {
   deck: Deck;
-}
+};
 
 export const removeCardFromLearningProcess = (deck: Deck): Deck => {
   return {

@@ -1,11 +1,11 @@
 import { Card } from "../card/card.model";
 
-export interface Deck {
+export type Deck = {
   id: string;
   name: string;
 
   cards: Card[];
-}
+};
 
 export const editDeck = (deck: Deck, newName: string): Deck => {
   if (newName === ``) {

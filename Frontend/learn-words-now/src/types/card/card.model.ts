@@ -1,8 +1,8 @@
-export interface Card {
+export type Card = {
   id: string;
   frontSide: string;
   backSide: string;
-}
+};
 
 export const addCard = (cards: Card[], newCard: Card): Card[] => {
   return [...cards, newCard];
