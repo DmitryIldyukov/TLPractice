@@ -1,3 +1,4 @@
+import { Application } from "../application/application.model";
 import { Card } from "../card/card.model";
 
 export type Deck = {
@@ -18,12 +19,15 @@ export const editDeck = (deck: Deck, newName: string): Deck => {
   };
 };
 
-export const addDeck = (decks: Deck[], deck: Deck): Deck[] => {
-  return [...decks, deck];
+export const addDeck = (app: Application, deck: Deck): Application => {
+  return { ...app, decks: [...app.decks, deck] };
 };
 
-export const deleteDeck = (decks: Deck[], deckId: string): Deck[] => {
-  return decks.filter((deck) => deck.id !== deckId);
+export const deleteDeck = (app: Application, deckId: string): Application => {
+  return {
+    ...app,
+    decks: app.decks.filter((deck) => deck.id !== deckId),
+  };
 };
 
 export const getDeckById = (decks: Deck[], deckId: string): Deck | undefined => {
