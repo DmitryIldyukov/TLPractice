@@ -2,7 +2,12 @@ import { useState } from "react";
 import styles from "./deck.module.scss";
 import { DeckInfo } from "./deckInfo/deckInfo";
 
-export const DeckComponent = ({ name, id }: { name: string; id: string }) => {
+type DeckComponentProps = {
+  name: string;
+  id: string;
+};
+
+export const DeckComponent = (props: DeckComponentProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -13,11 +18,11 @@ export const DeckComponent = ({ name, id }: { name: string; id: string }) => {
           setIsOpen(true);
         }}
       >
-        <p className={styles.cardName}>{name}</p>
+        <p className={styles.cardName}>{props.name}</p>
       </button>
       <DeckInfo
         isOpen={isOpen}
-        id={id}
+        id={props.id}
         onClose={() => {
           setIsOpen(false);
         }}

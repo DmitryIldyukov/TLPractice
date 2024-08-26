@@ -14,8 +14,9 @@ type DeckInfoProps = {
 export const DeckInfo = (props: DeckInfoProps) => {
   const [isAddCardOpen, setIsAddCardOpen] = useState(false);
   const [isLearningProcessOpen, setIsLearningProcessOpen] = useState(false);
-  const deck = useApplicationStore().getDeckById(props.id);
+
   const appStore = useApplicationStore();
+  const deck = useApplicationStore().getDeckById(props.id);
 
   const onDeleteDeck = () => {
     appStore.deleteDeckById(props.id);

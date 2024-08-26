@@ -2,9 +2,9 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { Deck } from "../types/deck/deck.model";
 import { Card } from "../types/card/card.model";
-import { immer } from "zustand/middleware/immer";
 import { v4 as uuidv4 } from "uuid";
 import { Application } from "../types/application/application.model";
+import { produce } from "immer";
 
 type ApplicationStore = {
   app: Application;
@@ -17,7 +17,7 @@ type ApplicationStore = {
 
 export const useApplicationStore = create<ApplicationStore>()(
   persist(
-    immer((set, get) => ({
+    (set, get) => ({
       app: {
         decks: [
           {
@@ -40,22 +40,45 @@ export const useApplicationStore = create<ApplicationStore>()(
       },
 
       addDeck: (deck: Deck) => {
-        set({ ...get(), app: Deck.addDeck(get().app, deck) });
+        set((state) =>
+          produce(state, (draft: ApplicationStore) => {
+            draft.app.decks.push(deck);
+          }),
+        );
       },
-      getDeckById: (id: string) => Deck.getDeckById(get().app.decks, id),
-      deleteCardById: (deckId: string, id: string) => {
-        set({ ...get(), app: Card.deleteCard(get().app, deckId, id) });
-      },
-      deleteDeckById: (deckId: string) => {
-        set({ ...get(), app: Deck.deleteDeck(get().app, deckId) });
-      },
+
+      getDeckById: (id: string) => get().app.decks.find((deck) => deck.id === id),
+
       addCard: (deckId: string, card: Card) => {
-        set((state) => ({
-          ...state,
-          app: Card.addCard(state.app, deckId, card),
-        }));
+        set((state) =>
+          produce(state, (draft: ApplicationStore) => {
+            const deck = draft.app.decks.find((deck) => deck.id === deckId);
+            if (deck) {
+              deck.cards.push(card);
+            }
+          }),
+        );
       },
-    })),
+
+      deleteCardById: (deckId: string, id: string) => {
+        set((state) =>
+          produce(state, (draft: ApplicationStore) => {
+            const deck = draft.app.decks.find((deck) => deck.id === deckId);
+            if (deck) {
+              deck.cards = deck.cards.filter((card) => card.id !== id);
+            }
+          }),
+        );
+      },
+
+      deleteDeckById: (deckId: string) => {
+        set((state) =>
+          produce(state, (draft: ApplicationStore) => {
+            draft.app.decks = draft.app.decks.filter((deck) => deck.id !== deckId);
+          }),
+        );
+      },
+    }),
     {
       name: "applicationStore",
       version: 1,

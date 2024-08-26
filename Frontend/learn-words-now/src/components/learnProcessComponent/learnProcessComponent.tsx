@@ -1,75 +1,71 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styles from "./learnProcessComponent.module.scss";
 import { useApplicationStore } from "../../store/store";
 import { Card } from "../../types/card/card.model";
 import { LearningProcess } from "../../types/learningProcess/learningProcess.model";
 
-export const LearnProcessComponent = ({
-  deckId,
-  isOpen,
-  onClose,
-}: {
+type LearnProcessProps = {
   deckId: string;
   isOpen: boolean;
   onClose: () => void;
-}) => {
+};
+
+export const LearnProcessComponent = (props: LearnProcessProps) => {
   const appStore = useApplicationStore();
-  const [deck, setDeck] = useState(appStore.getDeckById(deckId));
+  const [deck, setDeck] = useState(appStore.getDeckById(props.deckId));
   const [shuffledCards, setShuffledCards] = useState<Card[]>([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
 
   useEffect(() => {
-    if (!isOpen) {
-      setDeck(appStore.getDeckById(deckId));
+    if (!props.isOpen) {
+      setDeck(appStore.getDeckById(props.deckId));
       setShuffledCards([]);
       setCurrentCardIndex(0);
       setIsFlipped(false);
     }
-  }, [isOpen, deckId, appStore]);
+  }, [props.isOpen, props.deckId, appStore]);
 
   useEffect(() => {
-    if (deck && isOpen) {
+    if (deck && props.isOpen) {
       const shuffled = [...deck.cards].sort(() => Math.random() - 0.5);
       setShuffledCards(shuffled);
       setCurrentCardIndex(0);
       setIsFlipped(false);
     }
-  }, [deck, isOpen]);
+  }, [deck, props.isOpen]);
 
   const handleFlip = () => {
     setIsFlipped(!isFlipped);
   };
 
   const handleAnswer = (knewTranslation: boolean) => {
-    if (deck) {
-      const updatedDeck = knewTranslation
-        ? LearningProcess.removeCardFromLearningProcess(deck)
-        : LearningProcess.moveCardToDeckBottom(deck);
+    let updatedShuffledCards = [...shuffledCards];
 
-      setDeck(updatedDeck);
+    if (knewTranslation) {
+      updatedShuffledCards = LearningProcess.removeCardFromLearningProcess(updatedShuffledCards);
+    } else {
+      updatedShuffledCards = LearningProcess.moveCardToDeckBottom(updatedShuffledCards);
     }
 
+    setShuffledCards(updatedShuffledCards);
     setIsFlipped(false);
-    setCurrentCardIndex((prevIndex) => prevIndex + 1);
+
+    if (currentCardIndex >= updatedShuffledCards.length - 1) {
+      setCurrentCardIndex(0);
+    }
   };
 
   const currentCard = shuffledCards[currentCardIndex];
 
-  if (!isOpen) return null;
+  if (!props.isOpen) return null;
 
   return (
     <div className={styles.container}>
-      {!currentCard ? (
+      {shuffledCards.length === 0 ? (
         <div className={styles.content}>
           <p>Вы изучили все карточки!</p>
-          <button
-            onClick={() => {
-              onClose();
-            }}
-          >
-            Закрыть
-          </button>
+          <button onClick={props.onClose}>Закрыть</button>
         </div>
       ) : (
         <div className={styles.content}>
@@ -95,7 +91,7 @@ export const LearnProcessComponent = ({
               </button>
             </div>
           </div>
-          <button onClick={onClose}>Закрыть</button>
+          <button onClick={props.onClose}>Закрыть</button>
         </div>
       )}
     </div>

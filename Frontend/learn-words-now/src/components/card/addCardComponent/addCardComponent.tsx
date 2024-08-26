@@ -4,15 +4,13 @@ import { useApplicationStore } from "../../../store/store";
 import { Card } from "../../../types/card/card.model";
 import { v4 as uuidv4 } from "uuid";
 
-export const AddCardComponent = ({
-  isOpen,
-  deckId,
-  onClose,
-}: {
+type AddCardComponentProps = {
   isOpen: boolean;
   deckId: string;
   onClose: () => void;
-}) => {
+};
+
+export const AddCardComponent = (props: AddCardComponentProps) => {
   const [frontSide, setFrontSide] = useState("");
   const [backSide, setBackSide] = useState("");
   const appStore = useApplicationStore();
@@ -20,22 +18,27 @@ export const AddCardComponent = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!frontSide.trim() || !backSide.trim()) {
+      alert("Оба поля должны быть заполнены.");
+      return;
+    }
+
     const newCard: Card = {
       id: uuidv4(),
       frontSide,
       backSide,
     };
 
-    appStore.addCard(deckId, newCard);
+    appStore.addCard(props.deckId, newCard);
 
     setFrontSide("");
     setBackSide("");
 
-    onClose();
+    props.onClose();
   };
 
   return (
-    <form className={isOpen ? styles.form : styles.hidden}>
+    <form className={props.isOpen ? styles.form : styles.hidden}>
       <div className={styles.inputGroup}>
         <label htmlFor="frontSide">Слово:</label>
         <input
@@ -63,7 +66,7 @@ export const AddCardComponent = ({
       <button className={styles.submitBtn} onClick={handleSubmit}>
         Добавить
       </button>
-      <button type="button" className={styles.closeBtn} onClick={onClose}>
+      <button type="button" className={styles.closeBtn} onClick={props.onClose}>
         Отменить
       </button>
     </form>

@@ -4,7 +4,12 @@ import { useApplicationStore } from "../../../store/store";
 import { Deck } from "../../../types/deck/deck.model";
 import { v4 as uuidv4 } from "uuid";
 
-export const AddDeckComponent = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+type AddDeckComponentProps = {
+  isOpen: boolean;
+  onClose: () => void;
+};
+
+export const AddDeckComponent = (props: AddDeckComponentProps) => {
   const [deckName, setDeckName] = useState("");
   const appStore = useApplicationStore();
 
@@ -21,11 +26,11 @@ export const AddDeckComponent = ({ isOpen, onClose }: { isOpen: boolean; onClose
 
     setDeckName("");
 
-    onClose();
+    props.onClose();
   };
 
   return (
-    <form className={isOpen ? styles.form : styles.hidden}>
+    <form className={props.isOpen ? styles.form : styles.hidden}>
       <label htmlFor="deckName">Название колоды:</label>
       <input
         type="text"
@@ -39,7 +44,7 @@ export const AddDeckComponent = ({ isOpen, onClose }: { isOpen: boolean; onClose
       <button className={styles.submitBtn} onClick={handleSubmit}>
         Добавить
       </button>
-      <button type="button" className={styles.closeBtn} onClick={onClose}>
+      <button type="button" className={styles.closeBtn} onClick={props.onClose}>
         Отменить
       </button>
     </form>
