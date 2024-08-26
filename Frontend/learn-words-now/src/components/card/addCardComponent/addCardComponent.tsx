@@ -40,7 +40,9 @@ export const AddCardComponent = (props: AddCardComponentProps) => {
   return (
     <form className={props.isOpen ? styles.form : styles.hidden}>
       <div className={styles.inputGroup}>
-        <label htmlFor="frontSide">Слово:</label>
+        <label htmlFor="frontSide" className={styles.lable}>
+          Слово:
+        </label>
         <input
           type="text"
           id="frontSide"
@@ -52,7 +54,9 @@ export const AddCardComponent = (props: AddCardComponentProps) => {
         />
       </div>
       <div className={styles.inputGroup}>
-        <label htmlFor="translation">Перевод слова:</label>
+        <label htmlFor="translation" className={styles.lable}>
+          Перевод слова:
+        </label>
         <input
           type="text"
           id="backSide"
@@ -63,12 +67,14 @@ export const AddCardComponent = (props: AddCardComponentProps) => {
           className={styles.input}
         />
       </div>
-      <button className={styles.submitBtn} onClick={handleSubmit}>
-        Добавить
-      </button>
-      <button type="button" className={styles.closeBtn} onClick={props.onClose}>
-        Отменить
-      </button>
+      <div className={styles.btnGroup}>
+        <button className={styles.submitBtn} onClick={handleSubmit}>
+          Добавить
+        </button>
+        <button type="button" className={styles.closeBtn} onClick={props.onClose}>
+          Отменить
+        </button>
+      </div>
     </form>
   );
 };

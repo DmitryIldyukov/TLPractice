@@ -70,12 +70,13 @@ export const LearnProcessComponent = (props: LearnProcessProps) => {
       ) : (
         <div className={styles.content}>
           <div className={styles.card} onClick={handleFlip}>
-            <p>{isFlipped ? currentCard.backSide : currentCard.frontSide}</p>
+            <p className={styles.cardName}>{isFlipped ? currentCard.backSide : currentCard.frontSide}</p>
           </div>
           <div className={styles.question}>
-            <p>Знали ли вы перевод данного слова?</p>
+            <p className={styles.questionTitle}>Знали ли вы перевод данного слова?</p>
             <div className={styles.buttons}>
               <button
+                className={styles.actionBtn}
                 onClick={() => {
                   handleAnswer(true);
                 }}
@@ -83,6 +84,7 @@ export const LearnProcessComponent = (props: LearnProcessProps) => {
                 Да
               </button>
               <button
+                className={styles.actionBtn}
                 onClick={() => {
                   handleAnswer(false);
                 }}
@@ -91,7 +93,9 @@ export const LearnProcessComponent = (props: LearnProcessProps) => {
               </button>
             </div>
           </div>
-          <button onClick={props.onClose}>Закрыть</button>
+          <button className={styles.actionBtn} onClick={props.onClose}>
+            Закрыть
+          </button>
         </div>
       )}
     </div>

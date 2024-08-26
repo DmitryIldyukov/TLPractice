@@ -1,5 +1,50 @@
 @import "../../../index.scss";
 
+.form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
 .hidden {
   display: none;
+}
+
+.lable {
+  font-family: sans-serif;
+  font-size: 16px;
+}
+
+.inputGroup {
+  display: flex;
+  column-gap: 10px;
+  width: 50%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.input {
+  padding: 8px 8px;
+}
+
+.btnGroup {
+  display: flex;
+  flex-direction: row;
+  column-gap: 8px;
+}
+
+.submitBtn {
+  padding: 6px;
+  background-color: #2c2c2c;
+  color: $secondary-color;
+  font-family: sans-serif;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.closeBtn {
+  font-family: sans-serif;
+  font-size: 14px;
+  border-radius: 4px;
+  background-color: $background-color;
 }
