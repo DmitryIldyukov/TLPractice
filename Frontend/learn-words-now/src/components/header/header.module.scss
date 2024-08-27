@@ -1,0 +1,32 @@
+@import "../../index.scss";
+
+.header {
+  width: 100%;
+  height: 70px;
+  background-color: $header-color;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  flex-direction: row;
+  margin: 0 auto;
+  height: 100%;
+  max-width: $content-width;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  column-gap: 18px;
+  padding-left: 10px;
+}
+
+.logoTitle {
+  font-family: sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  margin: 0;
+}

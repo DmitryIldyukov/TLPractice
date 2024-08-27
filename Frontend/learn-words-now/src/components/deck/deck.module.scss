@@ -1,0 +1,20 @@
+@import "../../index.scss";
+
+.card {
+  display: flex;
+  border-radius: 14px;
+  width: 240px;
+  height: 160px;
+  justify-content: center;
+  align-items: center;
+  background-color: $card-background;
+}
+
+.card:hover {
+  cursor: pointer;
+}
+
+.cardName {
+  font-family: sans-serif;
+  font-size: 20px;
+}

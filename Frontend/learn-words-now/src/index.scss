@@ -1,0 +1,29 @@
+// colors
+$primary-color: #010101;
+$secondary-color: #ffffff;
+$background-color: #f2f2f7;
+$header-color: #ffcc00;
+$card-background: #fff0b9;
+
+//width
+$content-width: 1200px;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+}
+
+body {
+  line-height: 1.5;
+}
+
+button {
+  border: none;
+}
+
+button:hover {
+  cursor: pointer;
+}
